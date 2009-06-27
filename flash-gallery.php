@@ -1,8 +1,8 @@
 <?php
 /*
 Plugin Name: Flash Gallery
-Plugin URI: www.ulfben.com
-Description: use [flashgallery] shortcode to display an image wall/slideshow.
+Plugin URI: http://wordpress.org/extend/plugins/flash-gallery/
+Description: use [flashgallery] to turn your galleries into interactive, full screen slideshows.
 Version: 1.0
 Author: Ulf Benjaminsson
 Author URI: www.ulfben.com
