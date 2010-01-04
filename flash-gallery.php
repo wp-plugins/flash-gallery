@@ -1,9 +1,9 @@
 <?php
 /*
 Plugin Name: Flash Gallery
-Plugin URI: http://wordpress.org/extend/plugins/flash-gallery/
-Description: use [flashgallery] to turn your galleries into interactive, full screen slideshows.
-Version: 1.0
+Plugin URI: www.ulfben.com
+Description: use [flashgallery] to turn galleries into interactive, full screen slideshows.
+Version: 1.1
 Author: Ulf Benjaminsson
 Author URI: www.ulfben.com
 License: GPL
@@ -25,7 +25,7 @@ if(!defined('WP_PLUGIN_DIR')){
 define('FG_DELIMITER', '%');
 define('FG_URL', WP_PLUGIN_URL.'/flash-gallery/');
 define('FG_SCRIPT_URL', FG_URL.'js/');
-define('FG_SWF', 'zgallery.swf');
+define('FG_SWF', 'zgallery1.3.swf');
 
 /**
 *	This implementation of the [flashgallery] shortcode supports 
@@ -51,6 +51,8 @@ function fgr_shortcode($attr){
 			unset($attr['orderby']);
 		}
 	}
+
+	
 	$pid = $post->ID;	
 	if(!$pid && isset($_POST['submit']) && isset($_POST['previewID'])){	
 		$pid = $_POST['previewID'];
@@ -73,11 +75,26 @@ function fgr_shortcode($attr){
 		'background' => FG_URL.'background.jpg',
 		'logo' => FG_URL.'logo.png',
 		'scaling' => 'fit',
-		'exclude' => ''
+		'exclude' => '',
+		'numberposts' => -1
 	), $attr));
 	$exclude = explode(',',$exclude);
 	$id = intval($id);	
-	$attachments = get_children( array('post_parent' => $id, 'post_status' => 'inherit', 'post_type' => 'attachment', 'post_mime_type' => 'image', 'order' => $order, 'orderby' => $orderby, 'post__not_in' => $exclude) );
+	$global_id = $id;
+	/* Arguments for get_children(). */
+	$children = array(
+		'post_parent' => $id, 
+		'post_status' => 'inherit', 
+		'post_type' => 'attachment', 
+		'post_mime_type' => 'image', 
+		'order' => $order, 
+		'orderby' => $orderby, 
+		'post__not_in' => $exclude, 
+		'exclude' => "".$exclude, 
+		'numberposts' => $numberposts
+	);
+	
+	$attachments = get_children($children);
 	if(empty($attachments)){
 		return '';
 	}
@@ -87,7 +104,7 @@ function fgr_shortcode($attr){
 			$output .= wp_get_attachment_link($id, $size, true)."\n";
 		}
 		return $output;
-	} 	
+	} 		
 	$count = -1; 
 	$galleryc = 0;
 	$basepath = get_option('siteurl');
@@ -99,11 +116,18 @@ function fgr_shortcode($attr){
 	$categories = explode(FG_DELIMITER, trim($cats, FG_DELIMITER));		
 	$gallerycount = count($categories);
 	$wmode = ($transparent) ? "\n".$fgr.'.addParam("wmode", "transparent");' : '';	
-	
-	$flashgallery = '<p id="'.$fgr.'"><strong><a href="http://get.adobe.com/flashplayer/">Flash Player</a> is required to view this gallery!</strong></p>
-	<!-- Flash Gallery 1.0, a WordPress plugin by ulfben. -->
-	<script type="text/javascript">
-		var '.$fgr.' = new SWFObject("'.FG_URL.FG_SWF.'", "FG", "'.$width.'", "'.$height.'", "8", "#000000");
+	$output = '';
+	$noflash = apply_filters('post_gallery', $content, $attr); 
+	$flashgallery = '<p id="'.$fgr.'"></p>'.$noflash.'
+	<!-- Flash Gallery 1.1, a WordPress plugin by ulfben. -->
+	<script type="text/javascript">	
+		jQuery(document).ready(function() {	
+			jQuery("#gallery-'.$global_id.'").hide();
+			jQuery("#gallery-toggle-'.$global_id.'").click(function(){
+				jQuery("#gallery-'.$global_id.'").toggle(); return false;
+			});
+		});				
+		var '.$fgr.' = new SWFObject("'.FG_URL.FG_SWF.'", "'.$fgr.'", "'.$width.'", "'.$height.'", "8", "#000000");
 		'.$fgr.'.addParam("allowFullScreen", "true");'.$wmode.'
 		'.$fgr.'.addParam("scale", "noscale");		
 		'.$fgr.'.addParam("menu", "false");		
@@ -138,7 +162,9 @@ function fgr_shortcode($attr){
 			$flashgallery .= $fgr.'.addVariable("'.$galleryc.'_txt'.$count.'", "'.htmlspecialchars($info).'");'."\n";		
 		}
 	}	
-	$flashgallery .= $fgr.'.write("'.$fgr.'");</script>';	
+	//$flashgallery .= 'jQuery("#gallery-'.$id.'").hide();';
+	$flashgallery .= $fgr.'.write("'.$fgr.'");	
+	</script><a id="gallery-toggle-'.$global_id.'" href="#" style="font-size:smaller;display:block;text-align:right;">Problems with the Flash Gallery? Click here.</a>';	
 	return $flashgallery;
 }
 
@@ -151,8 +177,8 @@ function FG_set_current_Id_Title_Count($galleryc, $categories, &$gallery_id, &$c
 }
 
 function FG_js() {		
-	wp_enqueue_script('swfobject_1.4.4', FG_SCRIPT_URL.'swfobject.js', false, '1.4.4');	
-	wp_enqueue_script('swfaddress_2.3', FG_SCRIPT_URL.'swfaddress.js', false, '2.3');	
+	//wp_enqueue_script('swfobject_1.5.1', FG_SCRIPT_URL.'swfobject.js', false, '1.4.4'); //hardcoded in header.php now, to allow all (other) js to load in page footer.
+	wp_enqueue_script('swfaddress_2.3', FG_SCRIPT_URL.'swfaddress.js', false, '2.3', true);	
 }
 remove_shortcode('flashgallery');
 add_shortcode('flashgallery', 'fgr_shortcode');	
