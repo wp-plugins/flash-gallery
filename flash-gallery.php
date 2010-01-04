@@ -118,14 +118,28 @@ function fgr_shortcode($attr){
 	$wmode = ($transparent) ? "\n".$fgr.'.addParam("wmode", "transparent");' : '';	
 	$output = '';
 	$noflash = apply_filters('post_gallery', $content, $attr); 
-	$flashgallery = '<p id="'.$fgr.'"></p>'.$noflash.'
-	<!-- Flash Gallery 1.1, a WordPress plugin by ulfben. -->
-	<script type="text/javascript">	
-		jQuery(document).ready(function() {	
-			jQuery("#gallery-'.$global_id.'").hide();
+	$flashgallery = '<!-- Flash Gallery 1.1, a WordPress plugin by ulfben. -->'; 
+	if(isset($_COOKIE["fgrhide"]) || isset($_GET["fgrhide"])){ //kill the cookie with a press.
+		$flashgallery .= $noflash;
+		$flashgallery .= '<a id="gallery-toggle-'.$global_id.'" href="#" style="font-size:smaller;display:block;text-align:right;">[Enable Flash Gallery]</a>
+		<script type="text/javascript">
+		jQuery(document).ready(function() {
 			jQuery("#gallery-toggle-'.$global_id.'").click(function(){
-				jQuery("#gallery-'.$global_id.'").toggle(); return false;
+				var exdate=new Date();exdate.setDate(exdate.getDate()-1);document.cookie="fgrhide=0;expires="+exdate.toGMTString();
+				window.location.reload();
+				return false; 
 			});
+		});';
+	}else{
+		$flashgallery .= '<p id="'.$fgr.'"></p>
+		<a id="gallery-toggle-'.$global_id.'" href="#" style="font-size:smaller;display:block;text-align:right;">[Disable Flash Gallery]</a>
+		<script type="text/javascript">
+		jQuery(document).ready(function() {					
+			jQuery("#gallery-toggle-'.$global_id.'").click(function(){
+				var exdate=new Date();exdate.setDate(exdate.getDate()+365);document.cookie="fgrhide=1;expires="+exdate.toGMTString();
+				window.location.reload();
+				return false;
+			});		
 		});				
 		var '.$fgr.' = new SWFObject("'.FG_URL.FG_SWF.'", "'.$fgr.'", "'.$width.'", "'.$height.'", "8", "#000000");
 		'.$fgr.'.addParam("allowFullScreen", "true");'.$wmode.'
@@ -138,33 +152,33 @@ function fgr_shortcode($attr){
 		'.$fgr.'.addVariable("scaling", "'.$scaling.'");
 		'.$fgr.'.addVariable("rowcount", "'.$rows.'");
 		'.$fgr.'.addVariable("basepath", "'.$basepath.'");'."\n";
-	FG_set_current_Id_Title_Count($galleryc, $categories, $gallery_id, $current_gallery_title, $current_gallery_count);		
-	$flashgallery .= $fgr.'.addVariable("'.$gallery_id.'", "'.$current_gallery_title.'_'.$current_gallery_count.'");'."\n";		
-	foreach($attachments as $id => $attachment){		
-		$url = str_replace($basepath, '', wp_get_attachment_url($id)); //original size		
-		$thumb = wp_get_attachment_image_src($id, 'thumbnail');		
-		$thumb = $thumb[0];
-		$thumb = substr(strrchr($thumb, '/'), 1);		
-		if(($count == $current_gallery_count) && $gallerycount > 1){		
-			$galleryc++;		
-			FG_set_current_Id_Title_Count($galleryc, $categories, $gallery_id, $current_gallery_title, $current_gallery_count);
-			$flashgallery .= $fgr.'.addVariable("'.$gallery_id.'", "'.$current_gallery_title.'_'.$current_gallery_count.'");'."\n";	
-			$count = 0;
-		}else{
-			$count++;		 
-		}		
-		//$flashgallery .= $fgr.'.addVariable("'.$gallery_id.'_tmb'.$count.'", "'.$thumb.'");'."\n";
-		$flashgallery .= $fgr.'.addVariable("'.$galleryc.'_img'.$count.'", "'.$url.'?'.$thumb.'");'."\n";
-		//$title = htmlspecialchars($attachment->post_title);		
-		//post_excerpt == alt-text.
-		$info = ($attachment->post_content) ? $attachment->post_content : $attachment->post_excerpt;	
-		if($info){
-			$flashgallery .= $fgr.'.addVariable("'.$galleryc.'_txt'.$count.'", "'.htmlspecialchars($info).'");'."\n";		
-		}
-	}	
-	//$flashgallery .= 'jQuery("#gallery-'.$id.'").hide();';
-	$flashgallery .= $fgr.'.write("'.$fgr.'");	
-	</script><a id="gallery-toggle-'.$global_id.'" href="#" style="font-size:smaller;display:block;text-align:right;">Problems with the Flash Gallery? Click here.</a>';	
+		FG_set_current_Id_Title_Count($galleryc, $categories, $gallery_id, $current_gallery_title, $current_gallery_count);		
+		$flashgallery .= $fgr.'.addVariable("'.$gallery_id.'", "'.$current_gallery_title.'_'.$current_gallery_count.'");'."\n";		
+		foreach($attachments as $id => $attachment){		
+			$url = str_replace($basepath, '', wp_get_attachment_url($id)); //original size		
+			$thumb = wp_get_attachment_image_src($id, 'thumbnail');		
+			$thumb = $thumb[0];
+			$thumb = substr(strrchr($thumb, '/'), 1);		
+			if(($count == $current_gallery_count) && $gallerycount > 1){		
+				$galleryc++;		
+				FG_set_current_Id_Title_Count($galleryc, $categories, $gallery_id, $current_gallery_title, $current_gallery_count);
+				$flashgallery .= $fgr.'.addVariable("'.$gallery_id.'", "'.$current_gallery_title.'_'.$current_gallery_count.'");'."\n";	
+				$count = 0;
+			}else{
+				$count++;		 
+			}		
+			//$flashgallery .= $fgr.'.addVariable("'.$gallery_id.'_tmb'.$count.'", "'.$thumb.'");'."\n";
+			$flashgallery .= $fgr.'.addVariable("'.$galleryc.'_img'.$count.'", "'.$url.'?'.$thumb.'");'."\n";
+			//$title = htmlspecialchars($attachment->post_title);		
+			//post_excerpt == alt-text.
+			$info = ($attachment->post_content) ? $attachment->post_content : $attachment->post_excerpt;	
+			if($info){
+				$flashgallery .= $fgr.'.addVariable("'.$galleryc.'_txt'.$count.'", "'.htmlspecialchars($info).'");'."\n";		
+			}
+		}	
+		$flashgallery .= $fgr.'.write("'.$fgr.'");';
+	}
+	$flashgallery .= '</script>';	
 	return $flashgallery;
 }
 
