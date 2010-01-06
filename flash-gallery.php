@@ -119,27 +119,31 @@ function fgr_shortcode($attr){
 	$output = '';
 	$noflash = apply_filters('post_gallery', $content, $attr); 
 	$flashgallery = '<!-- Flash Gallery 1.1, a WordPress plugin by ulfben. -->
-	<p id="'.$fgr.'"></p>
+	<p id="'.$fgr.'">'.$noflash.'</p>
 	<script type="text/javascript">	
-		jQuery(document).ready(function() {				
-			if(document.cookie.indexOf("fgrhide=") != -1){		
-				jQuery("#gallery-toggle-'.$global_id.'").click(function(){
-					jQuery("#'.$fgr.'").hide();
-					jQuery("#gallery-'.$global_id.'").slideDown(600); 
+		function flashOn(b){
+			if(b){
+				jQuery("#gallery-'.$global_id.'").hide();
+				jQuery("#'.$fgr.'").show();				
+				jQuery("#gallery-toggle-'.$global_id.'").text("[Disable Flash Gallery]");
+				jQuery("#gallery-toggle-'.$global_id.'").click(function(){	
 					var exdate=new Date();exdate.setDate(exdate.getDate()-1);
 					document.cookie="fgrhide=0;expires="+exdate.toGMTString();
-					jQuery("#gallery-toggle-'.$global_id.'").text("[Enable Flash Gallery]");
+					flashOn(false);					
 				});
 			}else{
-				jQuery("#gallery-toggle-'.$global_id.'").click(function(){
-					jQuery("#'.$fgr.'").show();
-					jQuery("#gallery-'.$global_id.'").slideUp(600);
+				jQuery("#'.$fgr.'").hide();
+				jQuery("#gallery-'.$global_id.'").slideDown(600); 			
+				jQuery("#gallery-toggle-'.$global_id.'").text("[Enable Flash Gallery]");
+				jQuery("#gallery-toggle-'.$global_id.'").click(function(){	
 					var exdate=new Date();exdate.setDate(exdate.getDate()+365);
 					document.cookie="fgrhide=1;expires="+exdate.toGMTString();
-					jQuery("#gallery-toggle-'.$global_id.'").text("[Disable Flash Gallery]");
+					flashOn(true);
 				});
 			}
-			jQuery("#gallery-toggle-'.$global_id.'").click();
+		}
+		jQuery(document).ready(function() {	
+			flashOn(document.cookie.indexOf("fgrhide=") == -1);
 		});						
 		var '.$fgr.' = new SWFObject("'.FG_URL.FG_SWF.'", "'.$fgr.'", "'.$width.'", "'.$height.'", "8", "#000000");
 		'.$fgr.'.addParam("allowFullScreen", "true");'.$wmode.'
@@ -177,7 +181,7 @@ function fgr_shortcode($attr){
 		}
 	}	
 	$flashgallery .= $fgr.'.write("'.$fgr.'");	
-	</script>'.$noflash.'
+	</script>
 	<a id="gallery-toggle-'.$global_id.'" href="#" style="font-size:smaller;display:block;text-align:right;">[Toggle Flash Gallery]</a>';	
 	return $flashgallery;
 }
