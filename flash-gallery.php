@@ -119,31 +119,44 @@ function fgr_shortcode($attr){
 	$output = '';
 	$noflash = apply_filters('post_gallery', $content, $attr); 
 	$flashgallery = '<!-- Flash Gallery 1.1, a WordPress plugin by ulfben. -->
-	<p id="'.$fgr.'">'.$noflash.'</p>
+	<p id="'.$fgr.'" style="display:none;">'.$noflash.'</p>
 	<script type="text/javascript">	
-		function flashOn(b){
-			if(b){
-				jQuery("#gallery-'.$global_id.'").hide();
-				jQuery("#'.$fgr.'").show();				
-				jQuery("#gallery-toggle-'.$global_id.'").text("[Disable Flash Gallery]");
-				jQuery("#gallery-toggle-'.$global_id.'").click(function(){	
-					var exdate=new Date();exdate.setDate(exdate.getDate()-1);
-					document.cookie="fgrhide=0;expires="+exdate.toGMTString();
-					flashOn(false);					
-				});
-			}else{
-				jQuery("#'.$fgr.'").hide();
-				jQuery("#gallery-'.$global_id.'").slideDown(600); 			
-				jQuery("#gallery-toggle-'.$global_id.'").text("[Enable Flash Gallery]");
-				jQuery("#gallery-toggle-'.$global_id.'").click(function(){	
-					var exdate=new Date();exdate.setDate(exdate.getDate()+365);
-					document.cookie="fgrhide=1;expires="+exdate.toGMTString();
-					flashOn(true);
-				});
-			}
-		}
-		jQuery(document).ready(function() {	
-			flashOn(document.cookie.indexOf("fgrhide=") == -1);
+		jQuery("#gallery-'.$global_id.'").hide();
+		jQuery(document).ready(function() {							
+			function flashOn(b, thumbs, flash, toggle){				
+				var speed = 800;
+				if(b){
+					toggle.text("[Disable Flash Gallery]");	
+					thumbs.slideUp(speed, function(){
+						flash.slideDown(speed);
+					});
+					toggle.unbind("click").click(function(event){
+						var _thumbs = thumbs;
+						var _flash = flash;
+						var _toggle = toggle;			
+						var exdate=new Date();exdate.setDate(exdate.getDate()+365);
+						document.cookie="fgrhide=1;expires="+exdate.toGMTString()+"; path=/";
+						flashOn(false, _thumbs, _flash, _toggle);
+						event.preventDefault();	
+					});
+				}else{
+					toggle.text("[Enable Flash Gallery]");	
+					flash.slideUp(speed, function(){
+						thumbs.slideDown(speed); 
+					});						
+					toggle.unbind("click").click(function(event){	
+						var _thumbs = thumbs;
+						var _flash = flash;
+						var _toggle = toggle;					
+						var exdate=new Date();exdate.setDate(exdate.getDate()-1);
+						document.cookie="fgrhide=0;expires="+exdate.toGMTString()+"; path=/";
+						flashOn(true, _thumbs, _flash, _toggle);
+						event.preventDefault();	
+					});
+				}				
+			};		
+			var enabled = (document.cookie.indexOf("fgrhide=") === -1) ? true : false;
+			flashOn(enabled, jQuery("#gallery-'.$global_id.'"), jQuery("#'.$fgr.'"), jQuery("#gallery-toggle-'.$global_id.'"));
 		});						
 		var '.$fgr.' = new SWFObject("'.FG_URL.FG_SWF.'", "'.$fgr.'", "'.$width.'", "'.$height.'", "8", "#000000");
 		'.$fgr.'.addParam("allowFullScreen", "true");'.$wmode.'
@@ -180,9 +193,7 @@ function fgr_shortcode($attr){
 			$flashgallery .= $fgr.'.addVariable("'.$galleryc.'_txt'.$count.'", "'.htmlspecialchars($info).'");'."\n";		
 		}
 	}	
-	$flashgallery .= $fgr.'.write("'.$fgr.'");	
-	</script>
-	<a id="gallery-toggle-'.$global_id.'" href="#" style="font-size:smaller;display:block;text-align:right;">[Toggle Flash Gallery]</a>';	
+	$flashgallery .= $fgr.'.write("'.$fgr.'");</script><a id="gallery-toggle-'.$global_id.'" href="#" style="font-size:smaller;display:block;text-align:right;">[Toggle Flash Gallery]</a>';
 	return $flashgallery;
 }
 
