@@ -123,40 +123,15 @@ function fgr_shortcode($attr){
 	<script type="text/javascript">	
 		jQuery("#gallery-'.$global_id.'").hide();
 		jQuery(document).ready(function() {							
-			function flashOn(b, thumbs, flash, toggle){				
-				var speed = 800;
-				if(b){
-					toggle.text("[Disable Flash Gallery]");	
-					thumbs.slideUp(speed, function(){
-						flash.slideDown(speed);
-					});
-					toggle.unbind("click").click(function(event){
-						var _thumbs = thumbs;
-						var _flash = flash;
-						var _toggle = toggle;			
-						var exdate=new Date();exdate.setDate(exdate.getDate()+365);
-						document.cookie="fgrhide=1;expires="+exdate.toGMTString()+"; path=/";
-						flashOn(false, _thumbs, _flash, _toggle);
-						event.preventDefault();	
-					});
-				}else{
-					toggle.text("[Enable Flash Gallery]");	
-					flash.slideUp(speed, function(){
-						thumbs.slideDown(speed); 
-					});						
-					toggle.unbind("click").click(function(event){	
-						var _thumbs = thumbs;
-						var _flash = flash;
-						var _toggle = toggle;					
-						var exdate=new Date();exdate.setDate(exdate.getDate()-1);
-						document.cookie="fgrhide=0;expires="+exdate.toGMTString()+"; path=/";
-						flashOn(true, _thumbs, _flash, _toggle);
-						event.preventDefault();	
-					});
-				}				
-			};		
-			var enabled = (document.cookie.indexOf("fgrhide=") === -1) ? true : false;
-			flashOn(enabled, jQuery("#gallery-'.$global_id.'"), jQuery("#'.$fgr.'"), jQuery("#gallery-toggle-'.$global_id.'"));
+			jQuery("#gallery-toggle-'.$global_id.'").click(function(event){
+				var enabled = (document.cookie.indexOf("fgrhide=") === -1);
+				var expiresdays = (enabled) ? 365 : -1;		
+				var exdate=new Date(); exdate.setDate(exdate.getDate()+expiresdays);
+				document.cookie="fgrhide=1; expires="+exdate.toGMTString()+"; path=/";
+				toggleFGR(!enabled, jQuery("#gallery-'.$global_id.'"), jQuery("#'.$fgr.'"), jQuery("#gallery-toggle-'.$global_id.'"));
+				event.preventDefault();	
+			});
+			toggleFGR((document.cookie.indexOf("fgrhide=") === -1), jQuery("#gallery-'.$global_id.'"), jQuery("#'.$fgr.'"), jQuery("#gallery-toggle-'.$global_id.'"));
 		});						
 		var '.$fgr.' = new SWFObject("'.FG_URL.FG_SWF.'", "'.$fgr.'", "'.$width.'", "'.$height.'", "8", "#000000");
 		'.$fgr.'.addParam("allowFullScreen", "true");'.$wmode.'
@@ -194,6 +169,7 @@ function fgr_shortcode($attr){
 		}
 	}	
 	$flashgallery .= $fgr.'.write("'.$fgr.'");</script><a id="gallery-toggle-'.$global_id.'" href="#" style="font-size:smaller;display:block;text-align:right;">[Toggle Flash Gallery]</a>';
+	
 	return $flashgallery;
 }
 
@@ -207,7 +183,8 @@ function FG_set_current_Id_Title_Count($galleryc, $categories, &$gallery_id, &$c
 
 function FG_js() {		
 	//wp_enqueue_script('swfobject_1.5.1', FG_SCRIPT_URL.'swfobject.js', false, '1.4.4'); //hardcoded in header.php now, to allow all (other) js to load in page footer.
-	wp_enqueue_script('swfaddress_2.3', FG_SCRIPT_URL.'swfaddress.js', false, '2.3', true);	
+	wp_enqueue_script('swfaddress_2.3', FG_SCRIPT_URL.'swfaddress.js', 'swfobject', '2.3', true);
+	wp_enqueue_script('toggle_fgr', FG_SCRIPT_URL.'togglegallery.js', 'jquery', '1.0', true);		
 }
 remove_shortcode('flashgallery');
 add_shortcode('flashgallery', 'fgr_shortcode');	
