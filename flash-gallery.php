@@ -119,7 +119,7 @@ function fgr_shortcode($attr){
 	$output = '';
 	$noflash = apply_filters('post_gallery', $content, $attr); 
 	$flashgallery = '<!-- Flash Gallery 1.1, a WordPress plugin by ulfben. -->
-	<p id="'.$fgr.'" class="fgr" style="display:none;"><div class="fgr_noflash">'.$noflash.'</div></p>
+	<p id="'.$fgr.'" class="fgr" style="display:none;margin-bottom:-25px;"><div class="fgr_noflash">'.$noflash.'</div></p>
 	<script type="text/javascript">			
 		var '.$fgr.' = new SWFObject("'.FG_URL.FG_SWF.'", "'.$fgr.'", "'.$width.'", "'.$height.'", "8", "#000000");
 		'.$fgr.'.addParam("allowFullScreen", "true");'.$wmode.'
