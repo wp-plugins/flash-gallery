@@ -1,17 +1,19 @@
 /**
- * SWFAddress 2.3: Deep linking for Flash and Ajax <http://www.asual.com/swfaddress/>
+ * SWFAddress 2.4: Deep linking for Flash and Ajax <http://www.asual.com/swfaddress/>
  *
  * SWFAddress is (c) 2006-2009 Rostislav Hristov and contributors
  * This software is released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
  *
  */
 
-import SWFAddress;
+import com.asual.swfaddress.SWFAddress;
 
-class SWFAddressEvent {
+class com.asual.swfaddress.SWFAddressEvent {
 
     public static var INIT:String = 'init';
     public static var CHANGE:String = 'change';
+    public static var INTERNAL_CHANGE:String = 'internalChange';
+    public static var EXTERNAL_CHANGE:String = 'externalChange';
         
     private var _type:String;
     private var _value:String;

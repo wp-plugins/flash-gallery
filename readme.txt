@@ -10,20 +10,25 @@ Flash Gallery turns your normal galleries into interactive, full screen slidesho
 
 == Description ==
 
-The Flash Gallery plugin lets you turn your ordinary galleries into awesome Flash image walls, with full screen slideshow support and more!
+Flash Gallery uses [Jerald Zhan's](http://www.zcube.sg) cool [zGallery](http://flashden.net/item/zgallery-v1-fit-2-screen-xml-gallery/43071) 
+to display your post galleries.
 
-It is *especially* great for when you have *lots* of images in a post, or want to have several categories in one gallery. [Here's an example](http://game.hgo.se/blog/gotland-game-awards-2009/) showing some 600 pictures in 7 albums.
-
-The plugin uses a modified version of [Jerald Zhan's](http://www.zcube.sg) excellent [zGallery](http://flashden.net/item/zgallery-v1-fit-2-screen-xml-gallery/43071)
+It is great for when you have *lots* of images in a post, or want to have several categories in one gallery. [Here's an example](http://game.hgo.se/blog/gotland-game-awards-2009/) showing some 600 pictures in 7 albums.
 
 **Flash Gallery supports:**
 
 * full screen viewing
+
 * slideshow
+
 * multiple albums/categories per post
+
 * deep linking
+
 * RSS-readers
+
 * mouse- & keyboard interaction
+
 * configurable gallery background and logo
 
 See [Installation](http://wordpress.org/extend/plugins/flash-gallery/installation/) for more instructions.
@@ -55,12 +60,19 @@ Here's an example that will display a gallery with five rows, 650px high, and 3 
 All the regular [gallery] parameters still apply, and you've got these extras to play with:
 	
 * 	cats = "Album1\_12 % Album2\_33 % Album3\_66": *three albums and their image count*
+
 *	height = "400px", "100%"
+
 * 	rows = "3": *number of rows in the gallery thumbnail view.*
+
 *	background = "background.jpg": *URL to high-rez background*
+
 *	logo = "logo.png": *URL to logo*
+
 *   transparent = "false" or "true": *set flash's wmode*
+
 *	scaling = "fill", "fit" or "noscale": *how images are scaled when displayed(default: fit)*
+
 *	thumbsize = "110": *size (in pixels) of thumbnails*
 
 

@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: Flash Gallery
-Plugin URI: www.ulfben.com
+Plugin URI: http://wordpress.org/extend/plugins/flash-gallery/
 Description: use [flashgallery] to turn galleries into interactive, full screen slideshows.
 Version: 1.3
 Author: Ulf Benjaminsson
-Author URI: www.ulfben.com
+Author URI: http://www.ulfben.com
 License: GPL
 
 The FLA sources are available in trunk.
@@ -39,20 +39,21 @@ assumes thumbnails are stored in the same folder as the large image.
 *	logo = http://www.test.com/logo.png
 *   transparent = true/false (wmode)
 *	scaling: "fill", "fit", "noscale" (default: fit)
-*	thumbsize = 110 (size in pixels of thumbs)
+*	thumbsize = 110 (size in pixels of thumbs) (deprecated. the gallery now autosenses size of thumbnails)
 * 	usescroll = true/false (scroll to change image)
-*   
+* 	showtitles = true/false (default false)
+*   'allowdownload' = true/false (true)
+*	'color' = '0xFF0099'
+* 	
 */
 function fgr_shortcode($attr){	
-	global $post;		
+	global $post, $content;		
 	if(isset($attr['orderby'])){
 		$attr['orderby'] = sanitize_sql_orderby($attr['orderby']);
 		if(!$attr['orderby']){
 			unset($attr['orderby']);
 		}
 	}
-
-	
 	$pid = $post->ID;	
 	if(!$pid && isset($_POST['submit']) && isset($_POST['previewID'])){	
 		$pid = $_POST['previewID'];
@@ -72,13 +73,14 @@ function fgr_shortcode($attr){
 		'showtitles' => 'false', //fgr
 		'allowdownload' => 'true', //fgr
 		'height' => '450px', //fgr
-		'cats' => the_title('','',false),
+		'rowmajor' => 'false', //fgr
+		'cats' => the_title('','',false), //fgr
 		'size' => 'thumbnail',
-		'thumbsize' => 110,
+		'thumbsize' => 110, //fgr
 		'transparent' => false,
-		'background' => FG_URL.'background.jpg',
-		'logo' => FG_URL.'logo.png',
-		'scaling' => 'fit',
+		'background' => FG_URL.'background.jpg', //fgr
+		'logo' => FG_URL.'logo.png', //fgr
+		'scaling' => 'fit', //fgr
 		'exclude' => '',
 		'numberposts' => -1
 	), $attr));
@@ -126,65 +128,83 @@ function fgr_shortcode($attr){
 	$gallerycount = count($categories);
 	$wmode = ($transparent) ? ',"wmode": "transparent"' : '';	
 	$output = '';
+	if(empty($content)){
+	//	$content = $post->post_content;
+	}
+	
 	$noflash = apply_filters('post_gallery', $content, $attr);  //margin-bottom:-25px;
+
 	$flashgallery = '<!-- Flash Gallery 1.3, a WordPress plugin by ulfben. -->
-	<span id="'.$fgr.'" class="fgr" style="display:none;"><div class="fgr_noflash">'.$noflash.'</div></span>';	
-	$flashgallery .= '
-<script type="text/javascript"> 
-'.$fgr.'_config = { 
-"thumbsize":"'.$thumbsize.'",
-"gallerycount":"'.$gallerycount.'",
-"background":"'.$background.'",
-"logourl":"'.$logo.'",
-"scaling":"'.$scaling.'",
-"rowcount":"'.$rows.'",
-"basepath":"'.$basepath.'",
-"showtitles":"'.$showtitles.'",
-"usescroll":"'.$usescroll.'",
-"color":"'.$color.'",
-"allowdownload":"'.$allowdownload.'"
-};'."\n"; 
-		FG_set_current_Id_Title_Count($galleryc, $categories, $gallery_id, $current_gallery_title, $current_gallery_count);		
-		$flashgallery .= $fgr.'_config["'.$gallery_id.'"] = "'. $current_gallery_title.'_'.$current_gallery_count .'";'."\n";		
-		foreach($attachments as $id => $attachment){		
-			$url = str_replace($basepath, '', wp_get_attachment_url($id)); //original size		
-			$thumb = wp_get_attachment_image_src($id, 'thumbnail');		
-			$thumb = $thumb[0];
-			$thumb = substr(strrchr($thumb, '/'), 1);		
-			if(($count == $current_gallery_count) && $gallerycount > 1){		
-				$galleryc++;		
-				FG_set_current_Id_Title_Count($galleryc, $categories, $gallery_id, $current_gallery_title, $current_gallery_count);
-				$flashgallery .= $fgr.'_config["'.$gallery_id.'"] = "'. $current_gallery_title.'_'.$current_gallery_count .'";'."\n";
-				$count = 0;
-			}else{
-				$count++;		 
-			}		
-			$flashgallery .= $fgr.'_config["'.$galleryc.'_img'.$count.'"] = "'.$url.'?'.$thumb.'";'."\n";
-			/*
-			[post_content] => Description
-			[post_title] => Filename
-			[post_excerpt] => Caption */
-			$info = ($attachment->post_content) ? $attachment->post_content : $attachment->post_excerpt;	
-			if($info){
-				$flashgallery .= $fgr.'_config["'.$galleryc.'_txt'.$count.'"] = "'.htmlspecialchars($info).'";'."\n";			
-			}
-		}	
-	$flashgallery .= 'swfobject.embedSWF("'.FG_URL.FG_SWF.'", "'.$fgr.'", "'.$width.'", "'.$height.'", "9",
-"'.FG_SCRIPT_URL.'expressinstall.swf'.'",'.$fgr.'_config,{"allowFullScreen":"true"'.$wmode.',"menu":"false","allowscriptacess":"always"}, null);			
-	</script><a id="gallery-toggle-'.$global_id.'" class="fgr-toggle" href="#" style="font-size:smaller;display:block;text-align:right;">[Toggle Flash Gallery]</a>';	
+	<span id="'.$fgr.'" class="fgr"></span>
+	<span class="fgr_noflash">'.$noflash.'</span>
+	
+	<script type="text/javascript">
+	'.$fgr.'_config = { 
+		"thumbsize":"'.$thumbsize.'",
+		"gallerycount":"'.$gallerycount.'",
+		"background":"'.$background.'",
+		"logourl":"'.$logo.'",
+		"scaling":"'.$scaling.'",
+		"rowcount":"'.$rows.'",
+		"rowmajor":"'.$rowmajor.'",
+		"basepath":"'.$basepath.'",
+		"showtitles":"'.$showtitles.'",
+		"usescroll":"'.$usescroll.'",
+		"color":"'.$color.'",
+		"allowdownload":"'.$allowdownload.'"
+	};'."\n"; 
+	FG_set_current_Id_Title_Count($galleryc, $categories, $gallery_id, $current_gallery_title, $current_gallery_count, $attachments);		
+	$flashgallery .= $fgr.'_config["'.$gallery_id.'"] = "'. $current_gallery_title.'_'.$current_gallery_count .'";'."\n";		
+	foreach($attachments as $id => $attachment){		
+		$url = str_replace($basepath, '', wp_get_attachment_url($id)); //original size		
+		$thumb = wp_get_attachment_image_src($id, 'thumbnail');		
+		$thumb = $thumb[0];
+		$thumb = substr(strrchr($thumb, '/'), 1);		
+		if(($count == $current_gallery_count) && $gallerycount > 1){		
+			$galleryc++;		
+			FG_set_current_Id_Title_Count($galleryc, $categories, $gallery_id, $current_gallery_title, $current_gallery_count, $attachments);
+			$flashgallery .= $fgr.'_config["'.$gallery_id.'"] = "'. $current_gallery_title.'_'.$current_gallery_count .'";'."\n";
+			$count = 0;
+		}else{
+			$count++;		 
+		}		
+		$flashgallery .= $fgr.'_config["'.$galleryc.'_img'.$count.'"] = "'.$url.'?'.$thumb.'";'."\n";
+		/*
+		[post_content] => Description
+		[post_title] => Filename
+		[post_excerpt] => Caption */
+		$info = ($attachment->post_content) ? $attachment->post_content : $attachment->post_excerpt;	
+		if($info){
+			$flashgallery .= $fgr.'_config["'.$galleryc.'_txt'.$count.'"] = "'.htmlspecialchars($info).'";'."\n";			
+		}
+	}		
+$flashgallery .= '
+	if (typeof addLoadEvent != "function"){function addLoadEvent(func){var oldonload = window.onload;if (typeof window.onload != "function") {window.onload = func;} else { window.onload = function() {if (oldonload) {oldonload();}func();}}}}
+	addLoadEvent(function(){
+		if(document.cookie.indexOf("fgrhide=") === -1){
+			swfobject.embedSWF("'.FG_URL.FG_SWF.'", "'.$fgr.'", "'.$width.'", "'.$height.'", "9",
+				"'.FG_SCRIPT_URL.'expressinstall.swf'.'",'.$fgr.'_config,
+				{"allowFullScreen":"true"'.$wmode.',"menu":"false","allowscriptacess":"always"}, 
+				{});
+		}
+	});	
+	</script>
+	<a id="gallery-toggle-'.$global_id.'" class="fgr-toggle" href="#" title="Causes the page to reload, and revert the gallery to ordinary thumbnails." style="font-size:smaller;display:block;text-align:right;">[Toggle Flash Gallery]</a>';	
 	return $flashgallery;
 }
 
-function FG_set_current_Id_Title_Count($galleryc, $categories, &$gallery_id, &$current_gallery_title, &$current_gallery_count){	
+function FG_set_current_Id_Title_Count($galleryc, $categories, &$gallery_id, &$current_gallery_title, &$current_gallery_count, &$attachments){	
 	$gallery_id = 'gallery'.$galleryc;	
 	$name_and_count = explode('_', $categories[$galleryc]);
 	$current_gallery_title = ($name_and_count[0]) ? $name_and_count[0] : the_title('','',false);	
 	trim($current_gallery_title, FG_DELIMITER);
-	$current_gallery_count = (is_numeric($name_and_count[1])) ? $name_and_count[1] : count($attachments);
+	$current_gallery_count = (isset($name_and_count[1]) && is_numeric($name_and_count[1])) ? $name_and_count[1] : count($attachments);
 }
 
 function FG_js() {		
-	//wp_deregister_script('swfobject');
+	wp_deregister_script('jquery');
+	wp_register_script('jquery', 'http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js');
+	wp_enqueue_script('jquery', '', '', '', true ); //true == in footer. since wp 2.8
 	wp_enqueue_script('swfobject', '', false, '2.2', true); //hardcoded in header.php now, to allow all (other) js to load in page footer.
 	wp_enqueue_script('swfaddress_2.3', FG_SCRIPT_URL.'swfaddress.js', 'swfobject', '2.3', true);
 	wp_enqueue_script('toggle_fgr', FG_SCRIPT_URL.'togglegallery.js', 'jquery', '1.0', true);		

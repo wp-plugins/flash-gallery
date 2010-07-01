@@ -1,5 +1,5 @@
 /**
- * SWFAddress 2.3: Deep linking for Flash and Ajax <http://www.asual.com/swfaddress/>
+ * SWFAddress 2.4: Deep linking for Flash and Ajax <http://www.asual.com/swfaddress/>
  *
  * SWFAddress is (c) 2006-2009 Rostislav Hristov and contributors
  * This software is released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
@@ -8,26 +8,30 @@
 
 import flash.external.ExternalInterface;
 import mx.events.EventDispatcher;
-import SWFAddressEvent;
+import com.asual.swfaddress.SWFAddressEvent;
 
 /**
  * @author Rostislav Hristov <http://www.asual.com>
  * @author Ma Bingyao <andot@ujn.edu.cn>
  */
-class SWFAddress {
+class com.asual.swfaddress.SWFAddress {
 
     private static var _init:Boolean = false;
     private static var _initChange:Boolean = false;
     private static var _initChanged:Boolean = false;
     private static var _strict:Boolean = true;
     private static var _value:String = '';
-    private static var _interval:Number;
+    private static var _queue:Array = new Array();
+    private static var _queueInterval:Number;
+    private static var _initInterval:Number;
     private static var _availability:Boolean = ExternalInterface.available;
     private static var _dispatcher:EventDispatcher = new EventDispatcher();
     private static var _initializer:Boolean = _initialize();
 
     public static var onInit:Function;
     public static var onChange:Function;
+    public static var onInternalChange:Function;
+    public static var onExternalChange:Function;
 
     private function SWFAddress() {}
 
@@ -48,7 +52,7 @@ class SWFAddress {
             SWFAddress._value = _level0.$swfaddress;
             _availability = true;
         }
-        _interval = setInterval(SWFAddress._check, 10);
+        _initInterval = setInterval(SWFAddress._check, 10);
         return true;
     }
     
@@ -57,8 +61,9 @@ class SWFAddress {
             SWFAddress._setValueInit(_getValue());    
             SWFAddress._init = true;        
         }
-        if (typeof SWFAddress.onChange == 'function' || typeof _dispatcher['__q_change'] != 'undefined') {
-            clearInterval(_interval);
+        if (typeof SWFAddress.onChange == 'function' || typeof _dispatcher['__q_change'] != 'undefined' || 
+            typeof SWFAddress.onExternalChange == 'function' || typeof _dispatcher['__q_externalChange'] != 'undefined') {
+            clearInterval(_initInterval);
             SWFAddress._init = true;
             SWFAddress._setValueInit(_getValue());
         }
@@ -95,6 +100,7 @@ class SWFAddress {
             _dispatchEvent(SWFAddressEvent.INIT);
         } else {
             _dispatchEvent(SWFAddressEvent.CHANGE);
+            _dispatchEvent(SWFAddressEvent.EXTERNAL_CHANGE);
         }
         _initChange = true;
     }
@@ -111,6 +117,7 @@ class SWFAddress {
             }
         }
         _dispatchEvent(SWFAddressEvent.CHANGE);
+        _dispatchEvent(SWFAddressEvent.EXTERNAL_CHANGE);
     }
     
     private static function _dispatchEvent(type:String):Void {    
@@ -122,13 +129,29 @@ class SWFAddress {
             SWFAddress['on' + type]();
         }
     }
-
+    
+    private static function _callQueue():Void {
+        if (_queue.length != 0) {
+            var script:String = '';
+            for (var i:Number = 0, obj:Object; obj = _queue[i]; i++) {
+                if (typeof obj.param == 'string') obj.param = '"' + obj.param + '"';
+                script += obj.fn + '(' + obj.param + ');';
+            }
+            _queue = new Array();
+            getURL('javascript:' + script + 'void(0);');
+        } else {
+            clearInterval(_queueInterval);
+        }
+    }
+    
     private static function _call(fn:String, param:Object):Void {
         if (typeof param == 'undefined') param = '';
         if (_availability) {
             if (System.capabilities.os.indexOf('Mac') != -1) {
-                if (typeof param == 'string') param = '"' + param + '"';
-                getURL('javascript:' + fn + '(' + param + ');void(0);');
+                if (_queue.length == 0) {
+                    _queueInterval = setInterval(SWFAddress._callQueue, 10);                
+                }
+                _queue.push({fn: fn, param: param});
             } else {
                 ExternalInterface.call(fn, param);
             }
@@ -202,7 +225,7 @@ class SWFAddress {
         var out:Array = [], i:Number = 0, j:Number = 0, len:Number = str.length;
         var c:Number, c2:Number, c3:Number, c4:Number, s:Number;
 
-        var checkcode:Function = function (strcc:String, i1:Number, i2:Number):Number {
+        var checkcode:Function = function (strcc:String, i2:Number, i1:Number):Number {
             var d1 = strcc.charAt(i1),
                 d2 = strcc.charAt(i2);
             if (isNaN(parseInt(d1, 16)) || isNaN(parseInt(d2, 16))) {
@@ -211,10 +234,10 @@ class SWFAddress {
             return parseInt(d1 + d2, 16);
         }
         
-        var checkutf8:Function = function (strcu:String, i1:Number, i2:Number, i3:Number):Number {
+        var checkutf8:Function = function (strcu:String, i3:Number, i2:Number, i1:Number):Number {
             var ccu = strcu.charCodeAt(i1);
             if (ccu == 37) {
-                if ((ccu = checkcode(strcu, i2, i3)) == null) return null;
+                if ((ccu = checkcode(strcu, i3, i2)) == null) return null;
             }
             if ((ccu >> 6) != 2) {
                 return null;
@@ -289,7 +312,7 @@ class SWFAddress {
             }
         }
         return out.join('');
-    }    
+    }
     
     public static function back():Void {
         _call('SWFAddress.back');
@@ -419,6 +442,7 @@ class SWFAddress {
         _call('SWFAddress.setValue', value);
         if (SWFAddress._init) {
             _dispatchEvent(SWFAddressEvent.CHANGE);
+            _dispatchEvent(SWFAddressEvent.INTERNAL_CHANGE);
         } else {
             _initChanged = true;
         }
@@ -451,7 +475,6 @@ class SWFAddress {
         if (index != -1 && index < value.length) {
             return value.substr(index + 1);
         }
-        return '';
     }
 
     public static function getParameter(param:String):String {
@@ -462,14 +485,17 @@ class SWFAddress {
             var params:Array = value.split('&');
             var p:Array;
             var i:Number = params.length;
+            var r:Array = new Array();
             while(i--) {
                 p = params[i].split('=');
                 if (p[0] == param) {
-                    return p[1];
+                    r.push(p[1]);
                 }
             }
+            if (r.length != 0) {
+                return r.length != 1 ? r : r[0];
+            }
         }
-        return '';
     }
 
     public static function getParameterNames():Array {
