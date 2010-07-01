@@ -47,7 +47,7 @@ assumes thumbnails are stored in the same folder as the large image.
 * 	
 */
 function fgr_shortcode($attr){	
-	global $post, $content;		
+	global $post;	
 	if(isset($attr['orderby'])){
 		$attr['orderby'] = sanitize_sql_orderby($attr['orderby']);
 		if(!$attr['orderby']){
@@ -74,6 +74,7 @@ function fgr_shortcode($attr){
 		'allowdownload' => 'true', //fgr
 		'height' => '450px', //fgr
 		'rowmajor' => 'false', //fgr
+		'animate' => 'true', //fgr
 		'cats' => the_title('','',false), //fgr
 		'size' => 'thumbnail',
 		'thumbsize' => 110, //fgr
@@ -127,17 +128,13 @@ function fgr_shortcode($attr){
 	$categories = explode(FG_DELIMITER, trim($cats, FG_DELIMITER));		
 	$gallerycount = count($categories);
 	$wmode = ($transparent) ? ',"wmode": "transparent"' : '';	
-	$output = '';
-	if(empty($content)){
-	//	$content = $post->post_content;
-	}
-	
+	if(!isset($content)){$content = '';}
 	$noflash = apply_filters('post_gallery', $content, $attr);  //margin-bottom:-25px;
-
 	$flashgallery = '<!-- Flash Gallery 1.3, a WordPress plugin by ulfben. -->
-	<span id="'.$fgr.'" class="fgr"></span>
-	<span class="fgr_noflash">'.$noflash.'</span>
-	
+	<span class="fgr_container" id="container_'.$fgr.'">
+		<span id="'.$fgr.'" class="fgr"></span>
+	</span>
+	<div class="fgr_noflash" style="display:none;">'.$noflash.'</div>	
 	<script type="text/javascript">
 	'.$fgr.'_config = { 
 		"thumbsize":"'.$thumbsize.'",
@@ -146,6 +143,7 @@ function fgr_shortcode($attr){
 		"logourl":"'.$logo.'",
 		"scaling":"'.$scaling.'",
 		"rowcount":"'.$rows.'",
+		"animate":"'.$animate.'",
 		"rowmajor":"'.$rowmajor.'",
 		"basepath":"'.$basepath.'",
 		"showtitles":"'.$showtitles.'",
@@ -179,17 +177,17 @@ function fgr_shortcode($attr){
 		}
 	}		
 $flashgallery .= '
-	if (typeof addLoadEvent != "function"){function addLoadEvent(func){var oldonload = window.onload;if (typeof window.onload != "function") {window.onload = func;} else { window.onload = function() {if (oldonload) {oldonload();}func();}}}}
-	addLoadEvent(function(){
-		if(document.cookie.indexOf("fgrhide=") === -1){
-			swfobject.embedSWF("'.FG_URL.FG_SWF.'", "'.$fgr.'", "'.$width.'", "'.$height.'", "9",
-				"'.FG_SCRIPT_URL.'expressinstall.swf'.'",'.$fgr.'_config,
-				{"allowFullScreen":"true"'.$wmode.',"menu":"false","allowscriptacess":"always"}, 
-				{});
-		}
-	});	
+	load'.$fgr.' = function(){
+		swfobject.embedSWF("'.FG_URL.FG_SWF.'", "'.$fgr.'", "'.$width.'", "'.$height.'", "9",
+			"'.FG_SCRIPT_URL.'expressinstall.swf'.'",'.$fgr.'_config,
+			{"allowFullScreen":"true"'.$wmode.',"menu":"false","allowscriptacess":"always"}, 
+			{"styleclass":"fgr"});
+	};	
+	unload'.$fgr.' = function(){
+		swfobject.removeSWF("'.$fgr.'");
+	};
 	</script>
-	<a id="gallery-toggle-'.$global_id.'" class="fgr-toggle" href="#" title="Causes the page to reload, and revert the gallery to ordinary thumbnails." style="font-size:smaller;display:block;text-align:right;">[Toggle Flash Gallery]</a>';	
+	<a id="gallery-toggle-'.$global_id.'" class="fgr-toggle" href="#" rel="'.$fgr.'" title="" style="font-size:smaller;display:block;text-align:right;">[Toggle Flash Gallery]</a>';	
 	return $flashgallery;
 }
 
