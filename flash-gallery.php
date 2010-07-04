@@ -155,7 +155,7 @@ function fgr_shortcode($attr){
 		[post_excerpt] => Caption */
 		$info = ($attachment->post_content) ? $attachment->post_content : $attachment->post_excerpt;	
 		if($info){
-			$flashgallery .= $fgr.'_config["'.$galleryc.'_txt'.$count.'"] = "'.htmlspecialchars($info).'";'."\n";			
+			$flashgallery .= $fgr.'_config["'.$galleryc.'_txt'.$count.'"] = "'.rawurlencode($info).'";'."\n";			
 		}
 	}		
 $flashgallery .= '
