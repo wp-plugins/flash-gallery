@@ -13,7 +13,9 @@ Flash Gallery is the only practical way to publish VAST amount of pictures in a 
 The Flash Gallery plugin lets you turn your ordinary galleries into awesome image walls, with support for multiple albums per post, full screen viewing and slideshows.
 
 It is *especially* usefull for when you have *lots* of images in a post, or want to present images sorted into separate albums.
-Here's [one example with 175 images](http://game.hgo.se/blog/gotland-game-awards-2010/). I use the Flash Gallery primarly to controll the height of my posts. Whenever there would be more than 4 rows of thumbnails I replace the ordinary `[gallery]` with a `[flashgallery]`.  You can [browse through the archives here](http://game.hgo.se/cat/projects/) to see how that works.
+Here's [one example with 175 images](http://game.hgo.se/blog/gotland-game-awards-2010/). 
+
+I use the Flash Gallery primarly to controll the height of my posts. Whenever there would be more than 4 rows of thumbnails I replace the ordinary `[gallery]` with a `[flashgallery]`.  You can [browse through the archives here](http://game.hgo.se/cat/projects/) to see how that works.
 
 **Flash Gallery supports:**
 
@@ -31,6 +33,7 @@ Here's [one example with 175 images](http://game.hgo.se/blog/gotland-game-awards
 **Changes in 1.3** (2010-07-04)
 
 1. Halfed the gallery size (113KB to 50KB!)
+1. The gallery sleeps (consumes no CPU) when the mouse leaves.
 1. Proper fallback for visitors lacking javascript or Flash.
 1. "Enable / Disable"-option for visitors to revert to the ordinary gallery at any time.
 1. Right-click menu now features *"open image in new tab"* and *"copy image url"*.
@@ -45,6 +48,7 @@ Here's [one example with 175 images](http://game.hgo.se/blog/gotland-game-awards
 **1.3 (2010-07-04)**
 
 1. Halfed the gallery size (113KB to 50KB!)
+1. The gallery sleeps (consumes no CPU) when the mouse leaves.
 1. Proper fallback for visitors lacking javascript or Flash.
 1. "Enable / Disable"-option for visitors to revert to the ordinary gallery at any time.
 1. Right-click menu now features *"open image in new tab"* and *"copy image url"*.
@@ -61,7 +65,7 @@ Here's [one example with 175 images](http://game.hgo.se/blog/gotland-game-awards
 == Upgrade Notice ==
 
 = 1.3 =
-Half the size, twice the speed. Auto detect thumb size, safe fall back for flashless visitors. Lots of new options. 
+Half the size, twice the speed. Sleeps when unused. Auto detect thumb size, safe fall back for flashless visitors. Lots of new options. 
 
 == Installation ==
 
