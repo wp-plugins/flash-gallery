@@ -75,9 +75,10 @@ function fgr_shortcode($attr){
 		'height' => '450px', //fgr
 		'rowmajor' => 'false', //fgr
 		'animate' => 'true', //fgr
-		'cats' => the_title('','',false), //fgr
+		'cats' => '', //fgr - deprecated since 1.3. Use 'albums' instead.
+		'albums' => the_title('','',false), //fgr
 		'size' => 'thumbnail',
-		'thumbsize' => 110, //fgr
+		'thumbsize' => 110, //fgr - deprecated. autodetected by gallery.
 		'transparent' => false,
 		'background' => FG_URL.'background.jpg', //fgr
 		'logo' => FG_URL.'logo.png', //fgr
@@ -122,10 +123,11 @@ function fgr_shortcode($attr){
 	}	
 	$gallery_id;		
 	$current_gallery_title;
-	$current_gallery_count;	
+	$current_gallery_count;
+	$albums = (isset($albums) && !empty($albums)) ? $albums : $cats;
 	$width = '100%';	
 	$fgr = 'FG_'.$id; 		
-	$categories = explode(FG_DELIMITER, trim($cats, FG_DELIMITER));		
+	$categories = explode(FG_DELIMITER, trim($albums, FG_DELIMITER));		
 	$gallerycount = count($categories);
 	$wmode = ($transparent) ? ',"wmode": "transparent"' : '';	
 	if(!isset($content)){$content = '';}
@@ -203,7 +205,7 @@ function FG_js() {
 	wp_deregister_script('jquery');
 	wp_register_script('jquery', 'http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js');
 	wp_enqueue_script('jquery', '', '', '', true ); //true == in footer. since wp 2.8
-	wp_enqueue_script('swfobject', '', false, '2.2', true); //hardcoded in header.php now, to allow all (other) js to load in page footer.
+	wp_enqueue_script('swfobject', '', false, '2.2', true); 
 	wp_enqueue_script('swfaddress_2.3', FG_SCRIPT_URL.'swfaddress.js', 'swfobject', '2.3', true);
 	wp_enqueue_script('toggle_fgr', FG_SCRIPT_URL.'togglegallery.js', 'jquery', '1.0', true);		
 }
