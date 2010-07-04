@@ -30,7 +30,7 @@ I use the Flash Gallery primarly to controll the height of my posts. Whenever th
 * right-click menu with *"open image in new tab"* and *"copy image url"*
 * proper fallback for visitors not using Flash or Javascript
 
-**Changes in 1.3** (2010-07-04)
+**Changes in 1.3.1** (2010-07-04)
 
 1. Halfed the gallery size (113KB to 50KB!)
 1. The gallery sleeps (consumes no CPU) when the mouse leaves.
@@ -45,7 +45,7 @@ I use the Flash Gallery primarly to controll the height of my posts. Whenever th
 
 == Changelog ==
 
-**1.3 (2010-07-04)**
+**1.3.1 (2010-07-04)**
 
 1. Halfed the gallery size (113KB to 50KB!)
 1. The gallery sleeps (consumes no CPU) when the mouse leaves.
@@ -64,7 +64,7 @@ I use the Flash Gallery primarly to controll the height of my posts. Whenever th
 
 == Upgrade Notice ==
 
-= 1.3 =
+= 1.3.1 =
 Half the size, twice the speed. Sleeps when unused. Auto detect thumb size, safe fall back for flashless visitors. Lots of new options. 
 
 == Installation ==
