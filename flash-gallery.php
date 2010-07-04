@@ -2,13 +2,14 @@
 /*
 Plugin Name: Flash Gallery
 Plugin URI: http://wordpress.org/extend/plugins/flash-gallery/
-Description: use [flashgallery] to turn galleries into interactive, full screen slideshows.
+Description: use [flashgallery] to turn galleries into flash image walls.
 Version: 1.3
 Author: Ulf Benjaminsson
 Author URI: http://www.ulfben.com
 License: GPL
 
-The FLA sources are available in trunk.
+The FLA sources are available in the development version: http://wordpress.org/extend/plugins/flash-gallery/download/
+Documentation: http://wordpress.org/extend/plugins/flash-gallery/faq/
 */
 if(!defined('WP_CONTENT_URL')){
 	define('WP_CONTENT_URL', get_option('siteurl').'/wp-content');
@@ -27,25 +28,6 @@ define('FG_URL', WP_PLUGIN_URL.'/flash-gallery/');
 define('FG_SCRIPT_URL', FG_URL.'js/');
 define('FG_SWF', 'zgallery.swf');
 
-/**
-*	This implementation of the [flashgallery] shortcode supports 
-*	excluding images from the gallery: [gallery exclude='id1,id2']
-assumes thumbnails are stored in the same folder as the large image.
-
-* 	cats = "Album1_12%Album2_33%Album3_66" == three albums and their image count
-*	height = "400px", "100%" etc.
-* 	rows = "3" == number of rows in the gallery thumbnail view.
-*	background = "http://www.test.com/background.jpg"
-*	logo = http://www.test.com/logo.png
-*   transparent = true/false (wmode)
-*	scaling: "fill", "fit", "noscale" (default: fit)
-*	thumbsize = 110 (size in pixels of thumbs) (deprecated. the gallery now autosenses size of thumbnails)
-* 	usescroll = true/false (scroll to change image)
-* 	showtitles = true/false (default false)
-*   'allowdownload' = true/false (true)
-*	'color' = '0xFF0099'
-* 	
-*/
 function fgr_shortcode($attr){	
 	global $post;	
 	if(isset($attr['orderby'])){
@@ -89,7 +71,6 @@ function fgr_shortcode($attr){
 	$exclude = explode(',',$exclude);
 	$id = intval($id);	
 	$global_id = $id;
-	/* Arguments for get_children(). */
 	$children = array(
 		'post_parent' => $id, 
 		'post_status' => 'inherit', 
@@ -100,8 +81,7 @@ function fgr_shortcode($attr){
 		'post__not_in' => $exclude, 
 		'exclude' => "".$exclude, 
 		'numberposts' => $numberposts
-	);
-	
+	);	
 	$attachments = get_children($children);
 	if(empty($attachments)){
 		return '';
@@ -117,7 +97,7 @@ function fgr_shortcode($attr){
 	$galleryc = 0;
 	$basepath = get_option('siteurl');
 	foreach($attachments as $id => $attachment){
-		$s = wp_get_attachment_url($id); //assumes all attachments share the same URL
+		$s = wp_get_attachment_url($id);
 		$basepath = dirname($s);
 		break;
 	}	
@@ -131,7 +111,7 @@ function fgr_shortcode($attr){
 	$gallerycount = count($categories);
 	$wmode = ($transparent) ? ',"wmode": "transparent"' : '';	
 	if(!isset($content)){$content = '';}
-	$noflash = apply_filters('post_gallery', $content, $attr);  //margin-bottom:-25px;
+	$noflash = apply_filters('post_gallery', $content, $attr);
 	$flashgallery = '<!-- Flash Gallery 1.3, a WordPress plugin by ulfben. -->
 	<span class="fgr_container" id="container_'.$fgr.'">
 		<span id="'.$fgr.'" class="fgr"></span>
