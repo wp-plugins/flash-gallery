@@ -4,7 +4,7 @@ Donate link: http://amzn.com/w/2QB6SQ5XX2U0N
 Tags: gallery, flashgallery, flash, slideshow, wall, album, fullscreen, picture, photo, image
 Requires at least: 2.6
 Tested up to: 3.0
-Stable tag: 1.3.1
+Stable tag: 1.3.2
 
 Flash Gallery is the only practical way to publish VAST amount of pictures in a post. Features full screen viewing, slideshows, albums and more.
 
@@ -30,6 +30,12 @@ I use the Flash Gallery primarily to controll the height of my posts. Whenever t
 * right-click menu with *"open image in new tab"* and *"copy image url"*
 * proper fallback for visitors not using Flash or Javascript
 
+**Changes in 1.3.2 (2010-07-05)**
+
+1. Fix for 1.3.1 breaking the rich text editor.
+1. Added "delay"-parameter to set slideshow speed.
+1. Improved thumbsize detection.
+
 **Changes in 1.3.1** (2010-07-04)
 
 1. Halfed the gallery size (113KB to 50KB!)
@@ -44,6 +50,12 @@ I use the Flash Gallery primarily to controll the height of my posts. Whenever t
 1. [Lots of new options](http://wordpress.org/extend/plugins/flash-gallery/faq/). 
 
 == Changelog ==
+
+**1.3.2 (2010-07-05)**
+
+1. Fix for 1.3.1 breaking the rich text editor.
+1. Added "delay"-parameter to set slideshow speed.
+1. Improved thumbsize detection.
 
 **1.3.1 (2010-07-04)**
 
@@ -63,6 +75,9 @@ I use the Flash Gallery primarily to controll the height of my posts. Whenever t
 1. Initial release
 
 == Upgrade Notice ==
+
+= 1.3.2 =
+Fix for 1.3.1 breaking the rich text editor, added "delay"-parameter to set slideshow speed. Improved thumbsize detection.
 
 = 1.3.1 =
 Half the size, twice the speed. Sleeps when unused. Auto detect thumb size, safe fall back for flashless visitors. Lots of new options. 
@@ -100,6 +115,7 @@ All the regular `[gallery]` parameters still apply, and you've got these extra t
 * 	`cats = "Album1_12 % Album2_33 % Album3_66"`: **deprecated since 1.3, use `albums` instead**
 *	`albums = "Title1_10 % Another Title_20"`: *two albums, and their image count*
 *	`height = "400px"`, "100%"
+*	`delay = "3"`: *time to display images in slideshow, in seconds.*
 *	`exclude = "39,42"`: *exclude images with ID 39 & 42*
 * 	`rows = "3"`: *number of rows in the gallery thumbnail view.*
 *	`background = "background.jpg"`: *URL to high-rez background*
@@ -115,6 +131,11 @@ All the regular `[gallery]` parameters still apply, and you've got these extra t
 *	`animate = 'true'`: *let thumbs fly into position*
 
 Notice that color is a hexadecimal value with the `0x`-prefix, not `#` as is common in CSS and web development.
+
+= My thumbnails overlap / look wierd / behaves badly =
+Flash Gallery assumes you've got square thumbnails - same width as height. Make sure you've checked "`Crop thumbnail to exact dimensions`" in WordPress Admin -> Media.
+
+You can run [Regenerate Thumbnails](http://wordpress.org/extend/plugins/regenerate-thumbnails/) to apply your new settings to all images you've uploaded.
 
 = Where's the FLA-source? =
 [In the development version](http://wordpress.org/extend/plugins/flash-gallery/download/).
