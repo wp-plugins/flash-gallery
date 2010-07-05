@@ -97,15 +97,16 @@ You'd get three albums, "First Album" would get the first 50 images of the post,
 	
 All the regular `[gallery]` parameters still apply, and you've got these extra to play with:
 	
-* 	`cats = "Album1_12 % Album2_33 % Album3_66"`: *three albums and their image count* **deprecated since 1.3, use 'albums' instead**
+* 	`cats = "Album1_12 % Album2_33 % Album3_66"`: **deprecated since 1.3, use `albums` instead**
 *	`albums = "Title1_10 % Another Title_20"`: *two albums, and their image count*
 *	`height = "400px"`, "100%"
+*	`exclude = "39,42"`: *exclude images with ID 39 & 42*
 * 	`rows = "3"`: *number of rows in the gallery thumbnail view.*
 *	`background = "background.jpg"`: *URL to high-rez background*
 *	`logo = "logo.png"`: *URL to logo*
 *   `transparent = "false"`: *set flash's wmode*
 *	`scaling = "fill"`, "fit" or "noscale": *how images are scaled when displayed(default: fit)*
-*	`thumbsize = "110"`: *size (in pixels) of thumbnails* **deprecated. gallery auto-senses thumbsize since 1.3**
+*	`thumbsize = "110"`: *size (in pixels) of thumbnails* **ignored. gallery auto-senses thumbsize since 1.3**
 *	`color = '0xFF0099'`: *color of the interface highlights*	
 *	`usescroll = 'true'`: *enable browsing by scrollwheel*
 *	`showtitles = 'false'`: *display picture title over thumbnail*
