@@ -15,7 +15,7 @@ The Flash Gallery plugin lets you turn your ordinary galleries into awesome imag
 It is *especially* usefull for when you have *lots* of images in a post, or want to present images sorted into separate albums.
 Here's [one example with 175 images](http://game.hgo.se/blog/gotland-game-awards-2010/). 
 
-I use the Flash Gallery primarly to controll the height of my posts. Whenever there would be more than 4 rows of thumbnails I replace the ordinary `[gallery]` with a `[flashgallery]`.  You can [browse through the archives here](http://game.hgo.se/cat/projects/) to see how that works.
+I use the Flash Gallery primarily to controll the height of my posts. Whenever there would be more than 4 rows of thumbnails I replace the ordinary `[gallery]` with a `[flashgallery]`.  You can [browse through the archives here](http://game.hgo.se/cat/projects/) to see how that works.
 
 **Flash Gallery supports:**
 
