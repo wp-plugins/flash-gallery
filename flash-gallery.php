@@ -3,7 +3,7 @@
 Plugin Name: Flash Gallery
 Plugin URI: http://wordpress.org/extend/plugins/flash-gallery/
 Description: use [flashgallery] to turn galleries into flash image walls.
-Version: 1.3
+Version: 1.3.2
 Author: Ulf Benjaminsson
 Author URI: http://www.ulfben.com
 License: GPL
@@ -48,7 +48,8 @@ function fgr_shortcode($attr){
 		'icontag' => 'dt',
 		'link'	=> '',
 		'captiontag' => 'dd',
-		'columns' => 4, 
+		'columns' => 4,
+		'delay' => 3, //fgr
 		'color' => '0xFF0099', //fgr
 		'rows' => 3, //fgr
 		'usescroll' => 'true', //fgr
@@ -60,7 +61,7 @@ function fgr_shortcode($attr){
 		'cats' => '', //fgr - deprecated since 1.3. Use 'albums' instead.
 		'albums' => the_title('','',false), //fgr
 		'size' => 'thumbnail',
-		'thumbsize' => 110, //fgr - deprecated. autodetected by gallery.
+		'thumbsize' => get_option('thumbnail_size_w'), //fgr - deprecated. autodetected by gallery.
 		'transparent' => false,
 		'background' => FG_URL.'background.jpg', //fgr
 		'logo' => FG_URL.'logo.png', //fgr
@@ -126,6 +127,7 @@ function fgr_shortcode($attr){
 		"scaling":"'.$scaling.'",
 		"rowcount":"'.$rows.'",
 		"animate":"'.$animate.'",
+		"delay":"'.$delay.'",
 		"rowmajor":"'.$rowmajor.'",
 		"basepath":"'.$basepath.'",
 		"showtitles":"'.$showtitles.'",
@@ -155,7 +157,7 @@ function fgr_shortcode($attr){
 		[post_excerpt] => Caption */
 		$info = ($attachment->post_content) ? $attachment->post_content : $attachment->post_excerpt;	
 		if($info){
-			$flashgallery .= $fgr.'_config["'.$galleryc.'_txt'.$count.'"] = "'.htmlspecialchars($info).'";'."\n";			
+			$flashgallery .= $fgr.'_config["'.$galleryc.'_txt'.$count.'"] = "'.rawurlencode($info).'";'."\n";			
 		}
 	}		
 $flashgallery .= '
@@ -182,14 +184,17 @@ function FG_set_current_Id_Title_Count($galleryc, $categories, &$gallery_id, &$c
 }
 
 function FG_js() {		
-	wp_deregister_script('jquery');
-	wp_register_script('jquery', 'http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js');
-	wp_enqueue_script('jquery', '', '', '', true ); //true == in footer. since wp 2.8
-	wp_enqueue_script('swfobject', '', false, '2.2', true); 
-	wp_enqueue_script('swfaddress_2.3', FG_SCRIPT_URL.'swfaddress.js', 'swfobject', '2.3', true);
-	wp_enqueue_script('toggle_fgr', FG_SCRIPT_URL.'togglegallery.js', 'jquery', '1.0', true);		
+		wp_deregister_script('jquery');
+		wp_register_script('jquery', 'http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js');
+		wp_enqueue_script('jquery', '', '', '', true ); //true == in footer. since wp 2.8
+		wp_enqueue_script('swfobject', '', false, '2.2', true); 
+		wp_enqueue_script('swfaddress_2.3', FG_SCRIPT_URL.'swfaddress.js', 'swfobject', '2.3', true);
+		wp_enqueue_script('toggle_fgr', FG_SCRIPT_URL.'togglegallery.js', 'jquery', '1.0', true);
+	
 }
 remove_shortcode('flashgallery');
 add_shortcode('flashgallery', 'fgr_shortcode');	
-add_action('wp_print_scripts', 'FG_js');	
+if(!is_admin()){
+	add_action('wp_print_scripts', 'FG_js');	
+}		
 ?>
