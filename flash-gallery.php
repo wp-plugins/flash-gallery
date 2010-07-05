@@ -3,7 +3,7 @@
 Plugin Name: Flash Gallery
 Plugin URI: http://wordpress.org/extend/plugins/flash-gallery/
 Description: use [flashgallery] to turn galleries into flash image walls.
-Version: 1.3
+Version: 1.3.1
 Author: Ulf Benjaminsson
 Author URI: http://www.ulfben.com
 License: GPL
