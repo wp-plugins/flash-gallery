@@ -4,7 +4,7 @@ Donate link: http://amzn.com/w/2QB6SQ5XX2U0N
 Tags: gallery, flashgallery, flash, slideshow, wall, album, fullscreen, picture, photo, image
 Requires at least: 2.6
 Tested up to: 3.0
-Stable tag: 1.3
+Stable tag: 1.3.3
 
 Flash Gallery is the only practical way to publish VAST amount of pictures in a post. Features full screen viewing, slideshows, albums and more.
 
@@ -13,7 +13,9 @@ Flash Gallery is the only practical way to publish VAST amount of pictures in a 
 The Flash Gallery plugin lets you turn your ordinary galleries into awesome image walls, with support for multiple albums per post, full screen viewing and slideshows.
 
 It is *especially* usefull for when you have *lots* of images in a post, or want to present images sorted into separate albums.
-Here's [one example with 175 images](http://game.hgo.se/blog/gotland-game-awards-2010/). I use the Flash Gallery primarly to controll the height of my posts. Whenever there would be more than 4 rows of thumbnails I replace the ordinary `[gallery]` with a `[flashgallery]`.  You can [browse through the archives here](http://game.hgo.se/cat/projects/) to see how that works.
+Here's [one example with 175 images](http://game.hgo.se/blog/gotland-game-awards-2010/). 
+
+I use the Flash Gallery primarily to controll the height of my posts. Whenever there would be more than 4 rows of thumbnails I replace the ordinary `[gallery]` with a `[flashgallery]`.  You can [browse through the archives here](http://game.hgo.se/cat/projects/) to see how that works.
 
 **Flash Gallery supports:**
 
@@ -28,9 +30,21 @@ Here's [one example with 175 images](http://game.hgo.se/blog/gotland-game-awards
 * right-click menu with *"open image in new tab"* and *"copy image url"*
 * proper fallback for visitors not using Flash or Javascript
 
-**Changes in 1.3** (2010-07-04)
+**Changes in 1.3.3 (2010-07-29)**
+
+1. Added "hidetoggle"-parameter to hide the gallery toggle link
+1. Avoid dry runs of the filter (performance)
+
+**Changes in 1.3.2 (2010-07-05)**
+
+1. Fix for 1.3.1 breaking the rich text editor.
+1. Added "delay"-parameter to set slideshow speed.
+1. Improved thumbsize detection.
+
+**Changes in 1.3.1** (2010-07-04)
 
 1. Halfed the gallery size (113KB to 50KB!)
+1. The gallery sleeps (consumes no CPU) when the mouse leaves.
 1. Proper fallback for visitors lacking javascript or Flash.
 1. "Enable / Disable"-option for visitors to revert to the ordinary gallery at any time.
 1. Right-click menu now features *"open image in new tab"* and *"copy image url"*.
@@ -42,9 +56,20 @@ Here's [one example with 175 images](http://game.hgo.se/blog/gotland-game-awards
 
 == Changelog ==
 
-**1.3 (2010-07-04)**
+**Changes in 1.3.3 (2010-07-29)**
+1. Added "hidetoggle"-parameter to hide the gallery toggle link
+1. Avoid dry runs of the filter (performance)
+
+**1.3.2 (2010-07-05)**
+
+1. Fix for 1.3.1 breaking the rich text editor.
+1. Added "delay"-parameter to set slideshow speed.
+1. Improved thumbsize detection.
+
+**1.3.1 (2010-07-04)**
 
 1. Halfed the gallery size (113KB to 50KB!)
+1. The gallery sleeps (consumes no CPU) when the mouse leaves.
 1. Proper fallback for visitors lacking javascript or Flash.
 1. "Enable / Disable"-option for visitors to revert to the ordinary gallery at any time.
 1. Right-click menu now features *"open image in new tab"* and *"copy image url"*.
@@ -60,8 +85,14 @@ Here's [one example with 175 images](http://game.hgo.se/blog/gotland-game-awards
 
 == Upgrade Notice ==
 
-= 1.3 =
-Half the size, twice the speed. Auto detect thumb size, safe fall back for flashless visitors. Lots of new options. 
+= 1.3.3 =
+Added "hidetoggle"-parameter to disable the gallery toggle link. Avoid dry runs (performance!).
+
+= 1.3.2 =
+Fix for 1.3.1 breaking the rich text editor, added "delay"-parameter to set slideshow speed. Improved thumbsize detection.
+
+= 1.3.1 =
+Half the size, twice the speed. Sleeps when unused. Auto detect thumb size, safe fall back for flashless visitors. Lots of new options. 
 
 == Installation ==
 
@@ -93,15 +124,18 @@ You'd get three albums, "First Album" would get the first 50 images of the post,
 	
 All the regular `[gallery]` parameters still apply, and you've got these extra to play with:
 	
-* 	`cats = "Album1_12 % Album2_33 % Album3_66"`: *three albums and their image count* **deprecated since 1.3, use 'albums' instead**
+* 	`cats = "Album1_12 % Album2_33 % Album3_66"`: **deprecated since 1.3, use `albums` instead**
 *	`albums = "Title1_10 % Another Title_20"`: *two albums, and their image count*
 *	`height = "400px"`, "100%"
+*	`hidetoggle = "false"`: *true to not show the toggle gallery-link.*
+*	`delay = "3"`: *time to display images in slideshow, in seconds.*
+*	`exclude = "39,42"`: *exclude images with ID 39 & 42*
 * 	`rows = "3"`: *number of rows in the gallery thumbnail view.*
 *	`background = "background.jpg"`: *URL to high-rez background*
 *	`logo = "logo.png"`: *URL to logo*
 *   `transparent = "false"`: *set flash's wmode*
 *	`scaling = "fill"`, "fit" or "noscale": *how images are scaled when displayed(default: fit)*
-*	`thumbsize = "110"`: *size (in pixels) of thumbnails* **deprecated. gallery auto-senses thumbsize since 1.3**
+*	`thumbsize = "110"`: *size (in pixels) of thumbnails* **ignored. gallery auto-senses thumbsize since 1.3**
 *	`color = '0xFF0099'`: *color of the interface highlights*	
 *	`usescroll = 'true'`: *enable browsing by scrollwheel*
 *	`showtitles = 'false'`: *display picture title over thumbnail*
@@ -110,6 +144,11 @@ All the regular `[gallery]` parameters still apply, and you've got these extra t
 *	`animate = 'true'`: *let thumbs fly into position*
 
 Notice that color is a hexadecimal value with the `0x`-prefix, not `#` as is common in CSS and web development.
+
+= My thumbnails overlap / look wierd / behaves badly =
+Flash Gallery assumes you've got square thumbnails - same width as height. Make sure you've checked "`Crop thumbnail to exact dimensions`" in WordPress Admin -> Media.
+
+You can run [Regenerate Thumbnails](http://wordpress.org/extend/plugins/regenerate-thumbnails/) to apply your new settings to all images you've uploaded.
 
 = Where's the FLA-source? =
 [In the development version](http://wordpress.org/extend/plugins/flash-gallery/download/).
