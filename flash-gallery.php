@@ -3,7 +3,7 @@
 Plugin Name: Flash Gallery
 Plugin URI: http://wordpress.org/extend/plugins/flash-gallery/
 Description: use [flashgallery] to turn galleries into flash image walls.
-Version: 1.3.2
+Version: 1.3.3
 Author: Ulf Benjaminsson
 Author URI: http://www.ulfben.com
 License: GPL
@@ -29,7 +29,8 @@ define('FG_SCRIPT_URL', FG_URL.'js/');
 define('FG_SWF', 'zgallery.swf');
 
 function fgr_shortcode($attr){	
-	global $post;	
+	global $post;
+	if(!in_the_loop()){return '';}
 	if(isset($attr['orderby'])){
 		$attr['orderby'] = sanitize_sql_orderby($attr['orderby']);
 		if(!$attr['orderby']){
@@ -49,6 +50,7 @@ function fgr_shortcode($attr){
 		'link'	=> '',
 		'captiontag' => 'dd',
 		'columns' => 4,
+		'hidetoggle' => false, //fgr
 		'delay' => 3, //fgr
 		'color' => '0xFF0099', //fgr
 		'rows' => 3, //fgr
@@ -113,7 +115,7 @@ function fgr_shortcode($attr){
 	$wmode = ($transparent) ? ',"wmode": "transparent"' : '';	
 	if(!isset($content)){$content = '';}
 	$noflash = apply_filters('post_gallery', $content, $attr);
-	$flashgallery = '<!-- Flash Gallery 1.3, a WordPress plugin by ulfben. -->
+	$flashgallery = '<!-- Flash Gallery 1.3.3, a WordPress plugin by ulfben. -->
 	<span class="fgr_container" id="container_'.$fgr.'">
 		<span id="'.$fgr.'" class="fgr"></span>
 	</span>
@@ -170,8 +172,10 @@ $flashgallery .= '
 	unload'.$fgr.' = function(){
 		swfobject.removeSWF("'.$fgr.'");
 	};
-	</script>
-	<a id="gallery-toggle-'.$global_id.'" class="fgr-toggle" href="#" rel="'.$fgr.'" title="" style="font-size:smaller;display:block;text-align:right;">[Toggle Flash Gallery]</a>';	
+	</script>';
+	if(!$hidetoggle){
+		$flashgallery .= '<a id="gallery-toggle-'.$global_id.'" class="fgr-toggle" href="#" rel="'.$fgr.'" title="" style="font-size:smaller;display:block;text-align:right;">[Toggle Flash Gallery]</a>';	
+	}
 	return $flashgallery;
 }
 
@@ -184,13 +188,12 @@ function FG_set_current_Id_Title_Count($galleryc, $categories, &$gallery_id, &$c
 }
 
 function FG_js() {		
-		wp_deregister_script('jquery');
-		wp_register_script('jquery', 'http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js');
-		wp_enqueue_script('jquery', '', '', '', true ); //true == in footer. since wp 2.8
-		wp_enqueue_script('swfobject', '', false, '2.2', true); 
-		wp_enqueue_script('swfaddress_2.3', FG_SCRIPT_URL.'swfaddress.js', 'swfobject', '2.3', true);
-		wp_enqueue_script('toggle_fgr', FG_SCRIPT_URL.'togglegallery.js', 'jquery', '1.0', true);
-	
+	wp_deregister_script('jquery');
+	wp_register_script('jquery', 'http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js');
+	wp_enqueue_script('jquery', '', '', '', true ); //true == in footer. since wp 2.8
+	wp_enqueue_script('swfobject', '', false, '2.2', true); 
+	wp_enqueue_script('swfaddress_2.3', FG_SCRIPT_URL.'swfaddress.js', 'swfobject', '2.3', true);
+	wp_enqueue_script('toggle_fgr', FG_SCRIPT_URL.'togglegallery.js', 'jquery', '1.0', true);
 }
 remove_shortcode('flashgallery');
 add_shortcode('flashgallery', 'fgr_shortcode');	

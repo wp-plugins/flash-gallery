@@ -4,7 +4,7 @@ Donate link: http://amzn.com/w/2QB6SQ5XX2U0N
 Tags: gallery, flashgallery, flash, slideshow, wall, album, fullscreen, picture, photo, image
 Requires at least: 2.6
 Tested up to: 3.0
-Stable tag: 1.3.2
+Stable tag: 1.3.3
 
 Flash Gallery is the only practical way to publish VAST amount of pictures in a post. Features full screen viewing, slideshows, albums and more.
 
@@ -30,6 +30,11 @@ I use the Flash Gallery primarily to controll the height of my posts. Whenever t
 * right-click menu with *"open image in new tab"* and *"copy image url"*
 * proper fallback for visitors not using Flash or Javascript
 
+**Changes in 1.3.3 (2010-07-29)**
+
+1. Added "hidetoggle"-parameter to hide the gallery toggle link
+1. Avoid dry runs of the filter (performance)
+
 **Changes in 1.3.2 (2010-07-05)**
 
 1. Fix for 1.3.1 breaking the rich text editor.
@@ -50,6 +55,10 @@ I use the Flash Gallery primarily to controll the height of my posts. Whenever t
 1. [Lots of new options](http://wordpress.org/extend/plugins/flash-gallery/faq/). 
 
 == Changelog ==
+
+**Changes in 1.3.3 (2010-07-29)**
+1. Added "hidetoggle"-parameter to hide the gallery toggle link
+1. Avoid dry runs of the filter (performance)
 
 **1.3.2 (2010-07-05)**
 
@@ -75,6 +84,9 @@ I use the Flash Gallery primarily to controll the height of my posts. Whenever t
 1. Initial release
 
 == Upgrade Notice ==
+
+= 1.3.3 =
+Added "hidetoggle"-parameter to disable the gallery toggle link. Avoid dry runs (performance!).
 
 = 1.3.2 =
 Fix for 1.3.1 breaking the rich text editor, added "delay"-parameter to set slideshow speed. Improved thumbsize detection.
@@ -115,6 +127,7 @@ All the regular `[gallery]` parameters still apply, and you've got these extra t
 * 	`cats = "Album1_12 % Album2_33 % Album3_66"`: **deprecated since 1.3, use `albums` instead**
 *	`albums = "Title1_10 % Another Title_20"`: *two albums, and their image count*
 *	`height = "400px"`, "100%"
+*	`hidetoggle = "false"`: *true to not show the toggle gallery-link.*
 *	`delay = "3"`: *time to display images in slideshow, in seconds.*
 *	`exclude = "39,42"`: *exclude images with ID 39 & 42*
 * 	`rows = "3"`: *number of rows in the gallery thumbnail view.*
