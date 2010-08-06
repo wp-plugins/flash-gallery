@@ -112,7 +112,8 @@ function fgr_shortcode($attr){
 	$current_gallery_title;
 	$current_gallery_count;
 	$albums = (isset($albums) && !empty($albums)) ? $albums : $cats;
-	$width = '100%';	
+	$width = '100%';
+	if(!$allowfullscreen || strtolower($allowfullscreen) == 'false'){$allowfullscreen = 'false';}else{$allowfullscreen = 'true';}	
 	$fgr = 'FG_'.$id; 		
 	$categories = explode(FG_DELIMITER, trim($albums, FG_DELIMITER));		
 	$gallerycount = count($categories);
@@ -139,7 +140,8 @@ function fgr_shortcode($attr){
 		"showtitles":"'.$showtitles.'",
 		"usescroll":"'.$usescroll.'",
 		"color":"'.$color.'",
-		"allowdownload":"'.$allowdownload.'"
+		"allowdownload":"'.$allowdownload.'",
+		"allowfullscreen":"'.$allowfullscreen.'"
 	};'."\n"; 
 	FG_set_current_Id_Title_Count($galleryc, $categories, $gallery_id, $current_gallery_title, $current_gallery_count, $attachments);		
 	$flashgallery .= $fgr.'_config["'.$gallery_id.'"] = "'. $current_gallery_title.'_'.$current_gallery_count .'";'."\n";		
@@ -165,8 +167,7 @@ function fgr_shortcode($attr){
 		if($info){
 			$flashgallery .= $fgr.'_config["'.$galleryc.'_txt'.$count.'"] = "'.rawurlencode($info).'";'."\n";			
 		}
-	}
-	if(!$allowfullscreen || $allowfullscreen == 'false'){$allowfullscreen = 'false';}else{$allowfullscreen = 'true';}
+	}	
 $flashgallery .= '
 	load'.$fgr.' = function(){
 		swfobject.embedSWF("'.FG_URL.FG_SWF.'", "'.$fgr.'", "'.$width.'", "'.$height.'", "9",
