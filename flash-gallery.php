@@ -10,6 +10,9 @@ License: GPL
 
 The FLA sources are available in the development version: http://wordpress.org/extend/plugins/flash-gallery/download/
 Documentation: http://wordpress.org/extend/plugins/flash-gallery/faq/
+
+Trunk: 
+Added "allowfullscreen"-parameter
 */
 if(!defined('WP_CONTENT_URL')){
 	define('WP_CONTENT_URL', get_option('siteurl').'/wp-content');
@@ -51,6 +54,7 @@ function fgr_shortcode($attr){
 		'captiontag' => 'dd',
 		'columns' => 4,
 		'hidetoggle' => false, //fgr
+		'allowfullscreen' => true, //fgr
 		'delay' => 3, //fgr
 		'color' => '0xFF0099', //fgr
 		'rows' => 3, //fgr
@@ -161,12 +165,13 @@ function fgr_shortcode($attr){
 		if($info){
 			$flashgallery .= $fgr.'_config["'.$galleryc.'_txt'.$count.'"] = "'.rawurlencode($info).'";'."\n";			
 		}
-	}		
+	}
+	if(!$allowfullscreen || $allowfullscreen == 'false'){$allowfullscreen = 'false';}else{$allowfullscreen = 'true';}
 $flashgallery .= '
 	load'.$fgr.' = function(){
 		swfobject.embedSWF("'.FG_URL.FG_SWF.'", "'.$fgr.'", "'.$width.'", "'.$height.'", "9",
 			"'.FG_SCRIPT_URL.'expressinstall.swf'.'",'.$fgr.'_config,
-			{"allowFullScreen":"true"'.$wmode.',"menu":"false","allowscriptacess":"always"}, 
+			{"allowFullScreen":"'.$allowfullscreen.'"'.$wmode.',"menu":"false","allowscriptacess":"always"}, 
 			{"styleclass":"fgr"});
 	};	
 	unload'.$fgr.' = function(){
