@@ -24,7 +24,7 @@ I use the Flash Gallery primarily to controll the height of my posts. Whenever t
 * full screen viewing
 * slideshow
 * multiple albums/categories per post
-* [deep Linking](http://game.hgo.se/blog/gamescom-2010/#/gamescom-2010/dsc_7722.jpg)) :)
+* [deep Linking](http://game.hgo.se/blog/gamescom-2010/#/gamescom-2010/dsc_7722.jpg) (scroll down...) :)
 * RSS-readers
 * mouse- & keyboard interaction
 * configurable gallery background, logo and highlight color.
