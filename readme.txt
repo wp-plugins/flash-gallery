@@ -3,7 +3,7 @@ Contributors: ulfben
 Donate link: http://amzn.com/w/2QB6SQ5XX2U0N
 Tags: gallery, flashgallery, flash, slideshow, wall, album, fullscreen, picture, photo, image
 Requires at least: 2.6
-Tested up to: 3.0
+Tested up to: 3.0.1
 Stable tag: 1.3.3
 
 Flash Gallery is the only practical way to publish VAST amount of pictures in a post. Features full screen viewing, slideshows, albums and more.
@@ -13,16 +13,18 @@ Flash Gallery is the only practical way to publish VAST amount of pictures in a 
 The Flash Gallery plugin lets you turn your ordinary galleries into awesome image walls, with support for multiple albums per post, full screen viewing and slideshows.
 
 It is *especially* usefull for when you have *lots* of images in a post, or want to present images sorted into separate albums.
-Here's [one example with 175 images](http://game.hgo.se/blog/gotland-game-awards-2010/). 
+Here's [an example with 175 images](http://game.hgo.se/blog/gotland-game-awards-2010/). 
 
 I use the Flash Gallery primarily to controll the height of my posts. Whenever there would be more than 4 rows of thumbnails I replace the ordinary `[gallery]` with a `[flashgallery]`.  You can [browse through the archives here](http://game.hgo.se/cat/projects/) to see how that works.
+
+*If you value [my plugins](http://profiles.wordpress.org/users/ulfben/) and want to motivate further development - please **help me out** by [downloading and installing DropBox](http://www.dropbox.com/referrals/NTIzMDI3MDk) from my refferal link. It's a cross-plattform application to sync your files online and across computers. A 2GB account is free and my refferal earns you a 250MB bonus!*
 
 **Flash Gallery supports:**
 
 * full screen viewing
 * slideshow
 * multiple albums/categories per post
-* deep linking
+* [deep Linking](http://game.hgo.se/blog/gamescom-2010/#/gamescom-2010/dsc_7722.jpg)) :)
 * RSS-readers
 * mouse- & keyboard interaction
 * configurable gallery background, logo and highlight color.
@@ -35,24 +37,7 @@ I use the Flash Gallery primarily to controll the height of my posts. Whenever t
 1. Added "hidetoggle"-parameter to hide the gallery toggle link
 1. Avoid dry runs of the filter (performance)
 
-**Changes in 1.3.2 (2010-07-05)**
-
-1. Fix for 1.3.1 breaking the rich text editor.
-1. Added "delay"-parameter to set slideshow speed.
-1. Improved thumbsize detection.
-
-**Changes in 1.3.1** (2010-07-04)
-
-1. Halfed the gallery size (113KB to 50KB!)
-1. The gallery sleeps (consumes no CPU) when the mouse leaves.
-1. Proper fallback for visitors lacking javascript or Flash.
-1. "Enable / Disable"-option for visitors to revert to the ordinary gallery at any time.
-1. Right-click menu now features *"open image in new tab"* and *"copy image url"*.
-1. Gallery auto-detects thumbnail size.
-1. Scaling option "fit" now considers menubar, to avoid cropping the image.
-1. Upgraded all scripts
-1. All scripts moved to site footer - allowing page to render before downloading the flash gallery.
-1. [Lots of new options](http://wordpress.org/extend/plugins/flash-gallery/faq/). 
+[Older changelogs moved here](http://wordpress.org/extend/plugins/flash-gallery/changelog/).
 
 == Changelog ==
 
@@ -162,6 +147,11 @@ Use the built-in media uploader to create and insert galleries in your posts. Se
 1. State your problem succintly, *provide a link*!
 1. Always tag your post `resolved` and publish your solution.
 
+= Can I help you in any way? =
+Absolutely! If you [download & install DropBox](http://www.dropbox.com/referrals/NTIzMDI3MDk) on my refferal, I get 1GB (much needed!) extra space. DropBox is a cross-plattform application to sync your files online and across computers, and a 2GB account is *free*. Also - my refferal earns you a 250MB bonus! 
+
+If you've had any commercial applications for my plugins, please consider [sending me a book or two](http://www.amazon.com/gp/registry/wishlist/2QB6SQ5XX2U0N/105-3209188-5640446?reveal=unpurchased&filter=all&sort=priority&layout=standard&x). (used are fine!) 
+
 == Screenshots ==
 
 1. Full screen gallery view, with the Album-selector opened.
@@ -185,9 +175,6 @@ Jerald graciously allowed me to distribute the modified source for everyone to b
 * exposing all practical settings to flashvars
 	
 * various tweaks and fixes	
-
-If using this file commercially, please show your appreciation by purchasing [the original stock file](http://flashden.net/item/zgallery-v1-fit-2-screen-xml-gallery/43071) from him.
-	
 
 
 Copyright (C) 2009-2010 Ulf Benjaminsson (ulf at ulfben dot com).
