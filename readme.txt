@@ -4,7 +4,7 @@ Donate link: http://amzn.com/w/2QB6SQ5XX2U0N
 Tags: gallery, flashgallery, flash, slideshow, wall, album, fullscreen, picture, photo, image
 Requires at least: 2.6
 Tested up to: 3.0.1
-Stable tag: 1.3.3
+Stable tag: 1.3.4
 
 Flash Gallery is the only practical way to publish VAST amount of pictures in a post. Features full screen viewing, slideshows, albums and more.
 
@@ -19,8 +19,7 @@ I use the Flash Gallery primarily to controll the height of my posts. Whenever t
 
 *If you value [my plugins](http://profiles.wordpress.org/users/ulfben/) and want to motivate further development - please **help me out** by [downloading and installing DropBox](http://www.dropbox.com/referrals/NTIzMDI3MDk) from my refferal link. It's a cross-plattform application to sync your files online and across computers. A 2GB account is free and my refferal earns you a 250MB bonus!*
 
-**Flash Gallery supports:**
-
+= Flash Gallery supports: =
 * full screen viewing
 * slideshow
 * multiple albums/categories per post
@@ -30,29 +29,37 @@ I use the Flash Gallery primarily to controll the height of my posts. Whenever t
 * configurable gallery background, logo and highlight color.
 * being enabled / disabled by the visitor, at any time.
 * right-click menu with *"open image in new tab"* and *"copy image url"*
-* proper fallback for visitors not using Flash or Javascript
 
-**Changes in 1.3.3 (2010-07-29)**
-
-1. Added "hidetoggle"-parameter to hide the gallery toggle link
-1. Avoid dry runs of the filter (performance)
+= Changes in 1.3.4 (2010-10-24) =
+1. Added support for keyboard input in fullscreen
+1. Only includes scripts if gallery is used on current page (performance!)
+1. Removed [black backing of thumbnails](http://wordpress.org/support/topic/plugin-flash-gallery-thumbnail-black-border?replies=1)
+1. Updated FLA to Flash CS5
+1. Flash Gallery now requires [Flash 10 or newer](http://www.adobe.com/products/flashplayer/)!
+1. Added error catching to avoid scripts blowing up on errors
 
 [Older changelogs moved here](http://wordpress.org/extend/plugins/flash-gallery/changelog/).
 
 == Changelog ==
 
-**Changes in 1.3.3 (2010-07-29)**
+= Changes in 1.3.4 (2010-10-24) =
+1. Added support for keyboard input in fullscreen
+1. Will only include scripts if gallery is used on current page (performance!)
+1. Removed [black backing of thumbnails](http://wordpress.org/support/topic/plugin-flash-gallery-thumbnail-black-border?replies=1)
+1. Updated FLA to Flash CS5
+1. Flash Gallery now requires [Flash 10 or newer](http://www.adobe.com/products/flashplayer/)!
+1. Added error catching to avoid scripts blowing up on errors
+
+= Changes in 1.3.3 (2010-07-29) =
 1. Added "hidetoggle"-parameter to hide the gallery toggle link
 1. Avoid dry runs of the filter (performance)
 
-**1.3.2 (2010-07-05)**
-
+= 1.3.2 (2010-07-05) =
 1. Fix for 1.3.1 breaking the rich text editor.
 1. Added "delay"-parameter to set slideshow speed.
 1. Improved thumbsize detection.
 
-**1.3.1 (2010-07-04)**
-
+= 1.3.1 (2010-07-04) =
 1. Halfed the gallery size (113KB to 50KB!)
 1. The gallery sleeps (consumes no CPU) when the mouse leaves.
 1. Proper fallback for visitors lacking javascript or Flash.
@@ -64,11 +71,13 @@ I use the Flash Gallery primarily to controll the height of my posts. Whenever t
 1. All scripts moved to site footer - allowing page to render before downloading the flash gallery.
 1. [Lots of new options](http://wordpress.org/extend/plugins/flash-gallery/faq/). 
 
-**1.0 (2009-06-27)**
-
+= 1.0 (2009-06-27) =
 1. Initial release
 
 == Upgrade Notice ==
+
+= 1.3.4 =
+Fullscreen keyboard support. [Flash Player 10](http://www.adobe.com/products/flashplayer/) required!
 
 = 1.3.3 =
 Added "hidetoggle"-parameter to disable the gallery toggle link. Avoid dry runs (performance!).

@@ -1,4 +1,5 @@
-function toggleFGR(isOn, thumbs, toggle){				
+function toggleFGR(isOn, thumbs, toggle){
+	try{
 	var speed = 800;
 	if(isOn){		
 		toggle.text('[Disable Flash Gallery]');	
@@ -25,9 +26,11 @@ function toggleFGR(isOn, thumbs, toggle){
 			}
 		);	
 		thumbs.slideDown(speed);			
-	}				
+	}
+	}catch(e){};	
 };
-jQuery(document).ready(function() {							
+jQuery(document).ready(function() {
+	try{
 	jQuery(".fgr-toggle").click(function(event){
 		var enabled = (document.cookie.indexOf("fgrhide=") === -1);
 		var expiresdays = (enabled) ? 365 : -1;	
@@ -37,4 +40,5 @@ jQuery(document).ready(function() {
 		event.preventDefault();		
 	});
 	toggleFGR((document.cookie.indexOf("fgrhide=") === -1), jQuery(".fgr_noflash"), jQuery(".fgr-toggle"));
+	}catch(e){};
 });					
