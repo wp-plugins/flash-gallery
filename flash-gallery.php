@@ -3,7 +3,7 @@
 Plugin Name: Flash Gallery
 Plugin URI: http://wordpress.org/extend/plugins/flash-gallery/
 Description: use [flashgallery] to turn galleries into flash image walls.
-Version: 1.3.3
+Version: 1.3.4
 Author: Ulf Benjaminsson
 Author URI: http://www.ulfben.com
 License: GPL
@@ -29,7 +29,7 @@ if(!defined('WP_PLUGIN_DIR')){
 define('FG_DELIMITER', '%');
 define('FG_URL', WP_PLUGIN_URL.'/flash-gallery/');
 define('FG_SCRIPT_URL', FG_URL.'js/');
-define('FG_SWF', 'zgallery.swf');
+define('FG_SWF', 'zgallery.134.swf');
 
 function fgr_shortcode($attr){	
 	global $post;
@@ -120,7 +120,7 @@ function fgr_shortcode($attr){
 	$wmode = ($transparent) ? ',"wmode": "transparent"' : '';	
 	if(!isset($content)){$content = '';}
 	$noflash = apply_filters('post_gallery', $content, $attr);
-	$flashgallery = '<!-- Flash Gallery 1.3.3, a WordPress plugin by ulfben. -->
+	$flashgallery = '<!-- Flash Gallery 1.3.4, a WordPress plugin by ulfben. -->
 	<span class="fgr_container" id="container_'.$fgr.'">
 		<span id="'.$fgr.'" class="fgr"></span>
 	</span>
@@ -170,18 +170,24 @@ function fgr_shortcode($attr){
 	}	
 $flashgallery .= '
 	load'.$fgr.' = function(){
-		swfobject.embedSWF("'.FG_URL.FG_SWF.'", "'.$fgr.'", "'.$width.'", "'.$height.'", "9",
-			"'.FG_SCRIPT_URL.'expressinstall.swf'.'",'.$fgr.'_config,
-			{"allowFullScreen":"'.$allowfullscreen.'"'.$wmode.',"menu":"false","allowscriptacess":"always"}, 
-			{"styleclass":"fgr"});
+		try{
+			swfobject.embedSWF("'.FG_URL.FG_SWF.'", "'.$fgr.'", "'.$width.'", "'.$height.'", "10",
+				"'.FG_SCRIPT_URL.'expressinstall.swf'.'",'.$fgr.'_config,
+				{"allowFullScreen":"'.$allowfullscreen.'"'.$wmode.',"menu":"false","allowscriptacess":"always"}, 
+				{"styleclass":"fgr"});
+		}catch(e){};
 	};	
 	unload'.$fgr.' = function(){
-		swfobject.removeSWF("'.$fgr.'");
+		try{
+			swfobject.removeSWF("'.$fgr.'");
+		}catch(e){};
 	};
 	</script>';
 	if(!$hidetoggle){
 		$flashgallery .= '<a id="gallery-toggle-'.$global_id.'" class="fgr-toggle" href="#" rel="'.$fgr.'" title="" style="font-size:smaller;display:block;text-align:right;">[Toggle Flash Gallery]</a>';	
 	}
+	global $FG_add_script;
+	$FG_add_script = true;	
 	return $flashgallery;
 }
 
@@ -192,18 +198,27 @@ function FG_set_current_Id_Title_Count($galleryc, $categories, &$gallery_id, &$c
 	trim($current_gallery_title, FG_DELIMITER);
 	$current_gallery_count = (isset($name_and_count[1]) && is_numeric($name_and_count[1])) ? $name_and_count[1] : count($attachments);
 }
-
-function FG_js() {		
-	wp_deregister_script('jquery');
-	wp_register_script('jquery', 'http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js');
+function FG_js(){
+	if(!is_admin()){
+		wp_deregister_script('jquery');
+		wp_register_script('jquery', 'http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js');
+	}	
+}
+function FG_maybe_do_scripts(){
+	global $FG_add_script; 
+	if (!$FG_add_script){
+		return;
+	}
 	wp_enqueue_script('jquery', '', '', '', true ); //true == in footer. since wp 2.8
 	wp_enqueue_script('swfobject', '', false, '2.2', true); 
 	wp_enqueue_script('swfaddress_2.3', FG_SCRIPT_URL.'swfaddress.js', 'swfobject', '2.3', true);
-	wp_enqueue_script('toggle_fgr', FG_SCRIPT_URL.'togglegallery.js', 'jquery', '1.0', true);
+	wp_enqueue_script('toggle_fgr', FG_SCRIPT_URL.'togglegallery.js', 'jquery', '1.0', true);	
+	wp_print_scripts();
 }
+
 remove_shortcode('flashgallery');
 add_shortcode('flashgallery', 'fgr_shortcode');	
-if(!is_admin()){
-	add_action('wp_print_scripts', 'FG_js');	
-}		
+add_action('wp_print_scripts', 'FG_js');	
+add_filter('wp_footer', 'FG_maybe_do_scripts');
+		
 ?>
