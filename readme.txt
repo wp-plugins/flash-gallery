@@ -4,7 +4,7 @@ Donate link: http://amzn.com/w/2QB6SQ5XX2U0N
 Tags: gallery, flashgallery, flash, slideshow, wall, album, fullscreen, picture, photo, image
 Requires at least: 2.6
 Tested up to: 3.0.1
-Stable tag: 1.3.4
+Stable tag: 1.4
 
 Flash Gallery is the only practical way to publish VAST amount of pictures in a post. Features full screen viewing, slideshows, albums and more.
 
@@ -29,10 +29,17 @@ I use the Flash Gallery primarily to controll the height of my posts. Whenever t
 * configurable gallery background, logo and highlight color.
 * being enabled / disabled by the visitor, at any time.
 * right-click menu with *"open image in new tab"* and *"copy image url"*
+* complete fallback for Flash and JS-less browsers.
+
+= Changes in 1.4 (2010-10-25) =
+1. *Halved the amount of markup generated!*
+1. Fixed no-flash fallback
+1. Rewrote Flash-toggle to use query params instead of cookies
+1. Less JS, less HTML, less work - more speed all around!
 
 = Changes in 1.3.4 (2010-10-24) =
 1. Added support for keyboard input in fullscreen
-1. Only includes scripts if gallery is used on current page (performance!)
+1. *Only includes scripts if gallery is used on current page* (performance!)
 1. Removed [black backing of thumbnails](http://wordpress.org/support/topic/plugin-flash-gallery-thumbnail-black-border?replies=1)
 1. Updated FLA to Flash CS5
 1. Flash Gallery now requires [Flash 10 or newer](http://www.adobe.com/products/flashplayer/)!
@@ -41,6 +48,12 @@ I use the Flash Gallery primarily to controll the height of my posts. Whenever t
 [Older changelogs moved here](http://wordpress.org/extend/plugins/flash-gallery/changelog/).
 
 == Changelog ==
+
+= Changes in 1.4 (2010-10-25) =
+1. Halved the amount of markup generated!
+1. Fixed no-flash fallback
+1. Rewrote Flash-toggle to use query params instead of cookies
+1. Less JS, less HTML, less work - more speed all around!
 
 = Changes in 1.3.4 (2010-10-24) =
 1. Added support for keyboard input in fullscreen
@@ -75,6 +88,9 @@ I use the Flash Gallery primarily to controll the height of my posts. Whenever t
 1. Initial release
 
 == Upgrade Notice ==
+
+= 1.4 =
+Massive performance improvements. Upgrade!
 
 = 1.3.4 =
 Fullscreen keyboard support. [Flash Player 10](http://www.adobe.com/products/flashplayer/) required!

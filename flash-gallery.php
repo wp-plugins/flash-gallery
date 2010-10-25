@@ -3,16 +3,13 @@
 Plugin Name: Flash Gallery
 Plugin URI: http://wordpress.org/extend/plugins/flash-gallery/
 Description: use [flashgallery] to turn galleries into flash image walls.
-Version: 1.3.4
+Version: 1.4
 Author: Ulf Benjaminsson
 Author URI: http://www.ulfben.com
 License: GPL
 
 The FLA sources are available in the development version: http://wordpress.org/extend/plugins/flash-gallery/download/
 Documentation: http://wordpress.org/extend/plugins/flash-gallery/faq/
-
-Trunk: 
-Added "allowfullscreen"-parameter
 */
 if(!defined('WP_CONTENT_URL')){
 	define('WP_CONTENT_URL', get_option('siteurl').'/wp-content');
@@ -32,8 +29,12 @@ define('FG_SCRIPT_URL', FG_URL.'js/');
 define('FG_SWF', 'zgallery.134.swf');
 
 function fgr_shortcode($attr){	
-	global $post;
-	if(!in_the_loop()){return '';}
+	global $post, $ID, $wp_query;
+	if(!in_the_loop()){return '';}	
+	if(intval($wp_query->query_vars['noflash']) == 1){	
+		$enable = (!$hidetoggle) ? '<a class="fgr-toggle" href="'.get_permalink($ID).'" title="Click to enable the awesome Flash Gallery, with full screen viewing, slideshows and more." style="font-size:smaller;display:block;text-align:right;">[Enable Flash Gallery]</a>' : '';	
+		return gallery_shortcode($attr).$enable;		
+	}	
 	if(isset($attr['orderby'])){
 		$attr['orderby'] = sanitize_sql_orderby($attr['orderby']);
 		if(!$attr['orderby']){
@@ -75,11 +76,10 @@ function fgr_shortcode($attr){
 		'exclude' => '',
 		'numberposts' => -1
 	), $attr));
-	$exclude = explode(',',$exclude);
 	$id = intval($id);	
-	$global_id = $id;
-	$children = array(
-		'post_parent' => $id, 
+	$exclude = explode(',',$exclude);		
+	$attachments = get_children(array(
+		'post_parent' => $pid, 
 		'post_status' => 'inherit', 
 		'post_type' => 'attachment', 
 		'post_mime_type' => 'image', 
@@ -88,47 +88,44 @@ function fgr_shortcode($attr){
 		'post__not_in' => $exclude, 
 		'exclude' => "".$exclude, 
 		'numberposts' => $numberposts
-	);	
-	$attachments = get_children($children);
+	));		
 	if(empty($attachments)){
 		return '';
 	}
 	if(is_feed()){
 		$output = "\n";
-		foreach($attachments as $id => $attachment){
-			$output .= wp_get_attachment_link($id, $size, true)."\n";
+		foreach($attachments as $aID => $attachment){
+			$output .= wp_get_attachment_link($aID, $size, true)."\n";
 		}
 		return $output;
 	} 		
 	$count = -1; 
 	$galleryc = 0;
 	$basepath = get_option('siteurl');
-	foreach($attachments as $id => $attachment){
-		$s = wp_get_attachment_url($id);
+	foreach($attachments as $aID => $attachment){
+		$s = wp_get_attachment_url($aID);
 		$basepath = dirname($s);
 		break;
 	}	
 	$gallery_id;		
-	$current_gallery_title;
-	$current_gallery_count;
+	$current_album_title;
+	$current_album_count;
 	$albums = (isset($albums) && !empty($albums)) ? $albums : $cats;
 	$width = '100%';
 	if(!$allowfullscreen || strtolower($allowfullscreen) == 'false'){$allowfullscreen = 'false';}else{$allowfullscreen = 'true';}	
-	$fgr = 'FG_'.$id; 		
+	$fgr = 'FG_'.$pid; 		
 	$categories = explode(FG_DELIMITER, trim($albums, FG_DELIMITER));		
-	$gallerycount = count($categories);
+	$albumcount = count($categories);
 	$wmode = ($transparent) ? ',"wmode": "transparent"' : '';	
 	if(!isset($content)){$content = '';}
-	$noflash = (!$hidetoggle) ? gallery_shortcode($attr) : '';	
-	$flashgallery = '<!-- Flash Gallery 1.3.4, a WordPress plugin by ulfben. -->
+	$flashgallery = '<!-- Flash Gallery 1.4, a WordPress plugin by ulfben. -->
 	<span class="fgr_container" id="container_'.$fgr.'">
 		<span id="'.$fgr.'" class="fgr"></span>
-	</span>
-	<div class="fgr_noflash" style="display:none;">'.$noflash.'</div>	
+	</span>	
 	<script type="text/javascript">
 	'.$fgr.'_config = { 
 		"thumbsize":"'.$thumbsize.'",
-		"gallerycount":"'.$gallerycount.'",
+		"gallerycount":"'.$albumcount.'",
 		"background":"'.$background.'",
 		"logourl":"'.$logo.'",
 		"scaling":"'.$scaling.'",
@@ -143,17 +140,17 @@ function fgr_shortcode($attr){
 		"allowdownload":"'.$allowdownload.'",
 		"allowfullscreen":"'.$allowfullscreen.'"
 	};'."\n"; 
-	FG_set_current_Id_Title_Count($galleryc, $categories, $gallery_id, $current_gallery_title, $current_gallery_count, $attachments);		
-	$flashgallery .= $fgr.'_config["'.$gallery_id.'"] = "'. $current_gallery_title.'_'.$current_gallery_count .'";'."\n";		
-	foreach($attachments as $id => $attachment){		
-		$url = str_replace($basepath, '', wp_get_attachment_url($id)); //original size		
-		$thumb = wp_get_attachment_image_src($id, 'thumbnail');		
+	FG_set_current_Id_Title_Count($galleryc, $categories, $gallery_id, $current_album_title, $current_album_count, $attachments);		
+	$flashgallery .= $fgr.'_config["'.$gallery_id.'"] = "'. $current_album_title.'_'.$current_album_count .'";'."\n";		
+	foreach($attachments as $aID => $attachment){		
+		$url = str_replace($basepath, '', wp_get_attachment_url($aID)); //original size		
+		$thumb = wp_get_attachment_image_src($aID, 'thumbnail');		
 		$thumb = $thumb[0];
 		$thumb = substr(strrchr($thumb, '/'), 1);		
-		if(($count == $current_gallery_count) && $gallerycount > 1){		
+		if(($count == $current_album_count) && $albumcount > 1){		
 			$galleryc++;		
-			FG_set_current_Id_Title_Count($galleryc, $categories, $gallery_id, $current_gallery_title, $current_gallery_count, $attachments);
-			$flashgallery .= $fgr.'_config["'.$gallery_id.'"] = "'. $current_gallery_title.'_'.$current_gallery_count .'";'."\n";
+			FG_set_current_Id_Title_Count($galleryc, $categories, $gallery_id, $current_album_title, $current_album_count, $attachments);
+			$flashgallery .= $fgr.'_config["'.$gallery_id.'"] = "'. $current_album_title.'_'.$current_album_count .'";'."\n";
 			$count = 0;
 		}else{
 			$count++;		 
@@ -168,57 +165,51 @@ function fgr_shortcode($attr){
 			$flashgallery .= $fgr.'_config["'.$galleryc.'_txt'.$count.'"] = "'.rawurlencode($info).'";'."\n";			
 		}
 	}	
-$flashgallery .= '
-	load'.$fgr.' = function(){
+$flashgallery .= '	
+	addLoadEvent(function(){
 		try{
 			swfobject.embedSWF("'.FG_URL.FG_SWF.'", "'.$fgr.'", "'.$width.'", "'.$height.'", "10",
 				"'.FG_SCRIPT_URL.'expressinstall.swf'.'",'.$fgr.'_config,
 				{"allowFullScreen":"'.$allowfullscreen.'"'.$wmode.',"menu":"false","allowscriptacess":"always"}, 
 				{"styleclass":"fgr"});
-		}catch(e){};
-	};	
-	unload'.$fgr.' = function(){
-		try{
-			swfobject.removeSWF("'.$fgr.'");
-		}catch(e){};
-	};
+		}catch(e){};});	
 	</script>';
-	if(!$hidetoggle){
-		$flashgallery .= '<a id="gallery-toggle-'.$global_id.'" class="fgr-toggle" href="#" rel="'.$fgr.'" title="" style="font-size:smaller;display:block;text-align:right;">[Toggle Flash Gallery]</a>';	
-	}
+	$flashgallery .= (!$hidetoggle) ? '<a class="fgr-toggle" href="'.get_permalink($id).'?noflash=1" title="Having troubles with flash? Disable the Flash Gallery to browse pictures flash free." style="font-size:smaller;display:block;text-align:right;">[Disable Flash Gallery]</a>' : '';	
 	global $FG_add_script;
 	$FG_add_script = true;	
 	return $flashgallery;
 }
 
-function FG_set_current_Id_Title_Count($galleryc, $categories, &$gallery_id, &$current_gallery_title, &$current_gallery_count, &$attachments){	
+function FG_set_current_Id_Title_Count($galleryc, $categories, &$gallery_id, &$current_album_title, &$current_album_count, &$attachments){	
 	$gallery_id = 'gallery'.$galleryc;	
 	$name_and_count = explode('_', $categories[$galleryc]);
-	$current_gallery_title = ($name_and_count[0]) ? $name_and_count[0] : the_title('','',false);	
-	trim($current_gallery_title, FG_DELIMITER);
-	$current_gallery_count = (isset($name_and_count[1]) && is_numeric($name_and_count[1])) ? $name_and_count[1] : count($attachments);
+	$current_album_title = ($name_and_count[0]) ? $name_and_count[0] : the_title('','',false);	
+	trim($current_album_title, FG_DELIMITER);
+	$current_album_count = (isset($name_and_count[1]) && is_numeric($name_and_count[1])) ? $name_and_count[1] : count($attachments);
+}
+function fgr_register_query_var($vars){
+	$vars[] = 'noflash';
+	return $vars;
 }
 function FG_js(){
 	if(!is_admin()){
 		wp_deregister_script('jquery');
 		wp_register_script('jquery', 'http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js');
+		wp_register_script('addonload', FG_SCRIPT_URL.'addOnLoad.js', array(), '1');
+		wp_enqueue_script('addonload');
 	}	
 }
 function FG_maybe_do_scripts(){
 	global $FG_add_script; 
-	if (!$FG_add_script){
-		return;
-	}
+	if (!$FG_add_script){ return; }		
 	wp_enqueue_script('jquery', '', '', '', true ); //true == in footer. since wp 2.8
 	wp_enqueue_script('swfobject', '', false, '2.2', true); 
-	wp_enqueue_script('swfaddress_2.3', FG_SCRIPT_URL.'swfaddress.js', 'swfobject', '2.3', true);
-	wp_enqueue_script('toggle_fgr', FG_SCRIPT_URL.'togglegallery.js', 'jquery', '1.0', true);	
+	wp_enqueue_script('swfaddress_2.3', FG_SCRIPT_URL.'swfaddress.js', array('swfobject'), '2.3', true);	
 	wp_print_scripts();
 }
-
 remove_shortcode('flashgallery');
 add_shortcode('flashgallery', 'fgr_shortcode');	
+add_filter('query_vars', 'fgr_register_query_var');
 add_action('wp_print_scripts', 'FG_js');	
-add_filter('wp_footer', 'FG_maybe_do_scripts');
-		
+add_filter('wp_footer', 'FG_maybe_do_scripts');		
 ?>
