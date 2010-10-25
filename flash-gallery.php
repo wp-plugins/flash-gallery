@@ -119,7 +119,7 @@ function fgr_shortcode($attr){
 	$gallerycount = count($categories);
 	$wmode = ($transparent) ? ',"wmode": "transparent"' : '';	
 	if(!isset($content)){$content = '';}
-	$noflash = apply_filters('post_gallery', $content, $attr);
+	$noflash = (!$hidetoggle) ? gallery_shortcode($attr) : '';	
 	$flashgallery = '<!-- Flash Gallery 1.3.4, a WordPress plugin by ulfben. -->
 	<span class="fgr_container" id="container_'.$fgr.'">
 		<span id="'.$fgr.'" class="fgr"></span>
