@@ -4,7 +4,7 @@ Donate link: http://amzn.com/w/2QB6SQ5XX2U0N
 Tags: gallery, flashgallery, flash, slideshow, wall, album, fullscreen, picture, photo, image
 Requires at least: 2.6
 Tested up to: 3.0.1
-Stable tag: 1.4
+Stable tag: 1.4.1
 
 Flash Gallery is the only practical way to publish VAST amount of pictures in a post. Features full screen viewing, slideshows, albums and more.
 
@@ -17,7 +17,9 @@ Here's [an example with 175 images](http://game.hgo.se/blog/gotland-game-awards-
 
 I use the Flash Gallery primarily to controll the height of my posts. Whenever there would be more than 4 rows of thumbnails I replace the ordinary `[gallery]` with a `[flashgallery]`.  You can [browse through the archives here](http://game.hgo.se/cat/projects/) to see how that works.
 
-*If you value [my plugins](http://profiles.wordpress.org/users/ulfben/) and want to motivate further development - please **help me out** by [downloading and installing DropBox](http://www.dropbox.com/referrals/NTIzMDI3MDk) from my refferal link. It's a cross-plattform application to sync your files online and across computers. A 2GB account is free and my refferal earns you a 250MB bonus!*
+If you value my plugins, please help me out by [Flattr-ing them](http://flattr.com/thing/367557/Support-my-WordPress-plugins)! Or perhaps [send me a book](http://www.amazon.com/gp/registry/wishlist/2QB6SQ5XX2U0N/105-3209188-5640446?reveal=unpurchased&filter=all&sort=priority&layout=standard&x=11&y=10)? Used ones are fine! :)
+
+*//ulfben*
 
 = Flash Gallery supports: =
 * full screen viewing
@@ -30,6 +32,13 @@ I use the Flash Gallery primarily to controll the height of my posts. Whenever t
 * being enabled / disabled by the visitor, at any time.
 * right-click menu with *"open image in new tab"* and *"copy image url"*
 * complete fallback for Flash and JS-less browsers.
+
+= Changes in 1.4.1 (2011-12-28) =
+1. Sanitize URLs (cleaner, shorter links)
+1. Keep multiple instances on same page from fighting over the URL
+1. [Rewrote scaling routine to fix edge cases](http://wordpress.org/support/topic/square-images-cropped-in-fullscreen?replies=10)
+1. Cleaned up some PHP error notifications
+1. Stopped forcing the Google CDN for SWFObject
 
 = Changes in 1.4 (2010-10-25) =
 1. *Halved the amount of markup generated!*
@@ -88,6 +97,9 @@ I use the Flash Gallery primarily to controll the height of my posts. Whenever t
 1. Initial release
 
 == Upgrade Notice ==
+
+= 1.4.1 =
+Fixes and tweaks. Recommended.
 
 = 1.4 =
 Massive performance improvements. Upgrade!
@@ -173,9 +185,8 @@ Use the built-in media uploader to create and insert galleries in your posts. Se
 1. Always tag your post `resolved` and publish your solution.
 
 = Can I help you in any way? =
-Absolutely! If you [download & install DropBox](http://www.dropbox.com/referrals/NTIzMDI3MDk) on my refferal, I get 1GB (much needed!) extra space. DropBox is a cross-plattform application to sync your files online and across computers, and a 2GB account is *free*. Also - my refferal earns you a 250MB bonus! 
+Absolutely! Please help me out by [Flattr-ing my plugins](http://flattr.com/thing/367557/Support-my-WordPress-plugins), or [send me a book](http://www.amazon.com/gp/registry/wishlist/2QB6SQ5XX2U0N/105-3209188-5640446?reveal=unpurchased&filter=all&sort=priority&layout=standard&x=11&y=10)? Used ones are fine! :)
 
-If you've had any commercial applications for my plugins, please consider [sending me a book or two](http://www.amazon.com/gp/registry/wishlist/2QB6SQ5XX2U0N/105-3209188-5640446?reveal=unpurchased&filter=all&sort=priority&layout=standard&x). (used are fine!) 
 
 == Screenshots ==
 
@@ -202,7 +213,7 @@ Jerald graciously allowed me to distribute the modified source for everyone to b
 * various tweaks and fixes	
 
 
-Copyright (C) 2009-2010 Ulf Benjaminsson (ulf at ulfben dot com).
+Copyright (C) 2009-2012 Ulf Benjaminsson (ulf at ulfben dot com).
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

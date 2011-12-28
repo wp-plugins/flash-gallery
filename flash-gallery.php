@@ -3,7 +3,7 @@
 Plugin Name: Flash Gallery
 Plugin URI: http://wordpress.org/extend/plugins/flash-gallery/
 Description: use [flashgallery] to turn galleries into flash image walls.
-Version: 1.4
+Version: 1.4.1
 Author: Ulf Benjaminsson
 Author URI: http://www.ulfben.com
 License: GPL
@@ -26,12 +26,12 @@ if(!defined('WP_PLUGIN_DIR')){
 define('FG_DELIMITER', '%');
 define('FG_URL', WP_PLUGIN_URL.'/flash-gallery/');
 define('FG_SCRIPT_URL', FG_URL.'js/');
-define('FG_SWF', 'zgallery.134.swf');
+define('FG_SWF', 'zgallery_1.4.1.swf');
 
 function fgr_shortcode($attr){	
 	global $post, $ID, $wp_query;
 	if(!in_the_loop()){return '';}	
-	if(intval($wp_query->query_vars['noflash']) == 1){	
+	if(isset($wp_query->query_vars['noflash']) && intval($wp_query->query_vars['noflash']) == 1){	
 		$enable = (!$hidetoggle) ? '<a class="fgr-toggle" href="'.get_permalink($ID).'" title="Click to enable the awesome Flash Gallery, with full screen viewing, slideshows and more." style="font-size:smaller;display:block;text-align:right;">[Enable Flash Gallery]</a>' : '';	
 		return gallery_shortcode($attr).$enable;		
 	}	
@@ -71,7 +71,7 @@ function fgr_shortcode($attr){
 		'thumbsize' => get_option('thumbnail_size_w'), //fgr - deprecated. autodetected by gallery.
 		'transparent' => false,
 		'background' => FG_URL.'background.jpg', //fgr
-		'logo' => FG_URL.'logo.png', //fgr
+		'logo' => '', //fgr
 		'scaling' => 'fit', //fgr
 		'exclude' => '',
 		'numberposts' => -1
@@ -86,7 +86,7 @@ function fgr_shortcode($attr){
 		'order' => $order, 
 		'orderby' => $orderby, 
 		'post__not_in' => $exclude, 
-		'exclude' => "".$exclude, 
+		'exclude' => implode(',',$exclude), 
 		'numberposts' => $numberposts
 	));		
 	if(empty($attachments)){
@@ -118,8 +118,7 @@ function fgr_shortcode($attr){
 	$albumcount = count($categories);
 	$wmode = ($transparent) ? ',"wmode": "transparent"' : '';	
 	if(!isset($content)){$content = '';}
-	$flashgallery = '<!-- Flash Gallery 1.4, a WordPress plugin by ulfben. -->
-	<span class="fgr_container" id="container_'.$fgr.'">
+	$flashgallery = '<span class="fgr_container" id="container_'.$fgr.'">
 		<span id="'.$fgr.'" class="fgr"></span>
 	</span>	
 	<script type="text/javascript">
@@ -184,6 +183,7 @@ function FG_set_current_Id_Title_Count($galleryc, $categories, &$gallery_id, &$c
 	$gallery_id = 'gallery'.$galleryc;	
 	$name_and_count = explode('_', $categories[$galleryc]);
 	$current_album_title = ($name_and_count[0]) ? $name_and_count[0] : the_title('','',false);	
+	$current_album_title = sanitize_title($current_album_title);
 	trim($current_album_title, FG_DELIMITER);
 	$current_album_count = (isset($name_and_count[1]) && is_numeric($name_and_count[1])) ? $name_and_count[1] : count($attachments);
 }
@@ -193,9 +193,8 @@ function fgr_register_query_var($vars){
 }
 function FG_js(){
 	if(!is_admin()){
-		wp_deregister_script('jquery');
-		wp_register_script('jquery', 'http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js');
 		wp_register_script('addonload', FG_SCRIPT_URL.'addOnLoad.js', array(), '1');
+		//wp_enqueue_script('jquery', '', array(), false, true);							
 		wp_enqueue_script('addonload');
 	}	
 }
