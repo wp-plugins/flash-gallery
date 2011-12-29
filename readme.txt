@@ -19,7 +19,7 @@ I use the Flash Gallery primarily to controll the height of my posts. Whenever t
 
 If you value [my plugins](http://profiles.wordpress.org/users/ulfben/), please help me out by [Flattr-ing them](http://flattr.com/thing/367557/Support-my-WordPress-plugins)! Or perhaps [send me a book](http://www.amazon.com/gp/registry/wishlist/2QB6SQ5XX2U0N/105-3209188-5640446?reveal=unpurchased&filter=all&sort=priority&layout=standard&x=11&y=10)? Used ones are fine! :)
 
-*[//ulfben](http://profiles.wordpress.org/users/ulfben/)*
+*//[Ulf Benjaminsson](http://profiles.wordpress.org/users/ulfben/)*
 
 = Flash Gallery supports: =
 * full screen viewing
@@ -179,7 +179,7 @@ You can run [Regenerate Thumbnails](http://wordpress.org/extend/plugins/regenera
 Use the built-in media uploader to create and insert galleries in your posts. See [the screencast](http://wordpress.org/development/2008/03/wordpress-25-rc2/) (at 01:35), or [read the instructions](http://codex.wordpress.org/Using_Images#Inserting_Images_into_Posts).
 
 = How do I ask for help? =
-1. Search [the forums](http://wordpress.org/tags/Flash-Gallery) and post in a relevant thread if one exists.
+1. Search [the forums](http://wordpress.org/tags/flash-gallery?forum_id=10) and post in a relevant thread if one exists.
 1. Always tag your post with `Flash Gallery`
 1. State your problem succintly, *provide a link*!
 1. Always tag your post `resolved` and publish your solution.
@@ -213,7 +213,7 @@ Jerald graciously allowed me to distribute the modified source for everyone to b
 * various tweaks and fixes	
 
 
-Copyright (C) 2009-2012 Ulf Benjaminsson (ulf at ulfben dot com).
+Copyright (C) 2009-2012 Ulf Benjaminsson (my first name at ulfben dot com).
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
