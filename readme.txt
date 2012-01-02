@@ -2,8 +2,8 @@
 Contributors: ulfben
 Donate link: http://amzn.com/w/2QB6SQ5XX2U0N
 Tags: gallery, flashgallery, flash, slideshow, wall, album, fullscreen, picture, photo, image
-Requires at least: 2.6
-Tested up to: 3.0.1
+Requires at least: 3.3
+Tested up to: 3.3
 Stable tag: 1.4.1
 
 Flash Gallery is the only practical way to publish VAST amount of pictures in a post. Features full screen viewing, slideshows, albums and more.
