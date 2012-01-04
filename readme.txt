@@ -144,7 +144,7 @@ It's nothing fancy - a title, an underscore and the number of images you want to
 
 You'd get three albums, "First Album" would get the first 50 images of the post, "Second" would display the next 25 and "Third" would display the last 25.
 	
-All the regular `[gallery]` parameters still apply, and you've got these extra to play with:
+All the regular `[gallery]` parameters still apply ('cept for columns), and you've got these extra to play with:
 	
 * 	`cats = "Album1_12 % Album2_33 % Album3_66"`: **deprecated since 1.3, use `albums` instead**
 *	`albums = "Title1_10 % Another Title_20"`: *two albums, and their image count*
