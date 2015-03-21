@@ -1,9 +1,9 @@
 === Flash Gallery ===
 Contributors: ulfben
-Donate link: http://amzn.com/w/2QB6SQ5XX2U0N
+Donate link: http://flattr.com/thing/367557/Support-my-WordPress-plugins
 Tags: gallery, flashgallery, flash, slideshow, wall, album, fullscreen, picture, photo, image
-Requires at least: 3.3
-Tested up to: 3.3
+Requires at least: 3.9
+Tested up to: 3.9
 Stable tag: 1.4.1
 
 Flash Gallery is the only practical way to publish VAST amount of pictures in a post. Features full screen viewing, slideshows, albums and more.
@@ -17,9 +17,15 @@ Here's [an example with 175 images](http://game.hgo.se/blog/gotland-game-awards-
 
 I use the Flash Gallery primarily to controll the height of my posts. Whenever there would be more than 4 rows of thumbnails I replace the ordinary `[gallery]` with a `[flashgallery]`.  You can [browse through the archives here](http://game.hgo.se/cat/projects/) to see how that works.
 
-If you value [my plugins](http://profiles.wordpress.org/users/ulfben/), please help me out by [Flattr-ing them](http://flattr.com/thing/367557/Support-my-WordPress-plugins)! Or perhaps [send me a book](http://www.amazon.com/gp/registry/wishlist/2QB6SQ5XX2U0N/105-3209188-5640446?reveal=unpurchased&filter=all&sort=priority&layout=standard&x=11&y=10)? Used ones are fine! :)
+If you value [my plugins](http://profiles.wordpress.org/users/ulfben/), there's several ways you can help me out; 
 
-*//[Ulf Benjaminsson](http://profiles.wordpress.org/users/ulfben/)*
+* Help me out by [Flattr-ing them](http://flattr.com/thing/367557/Support-my-WordPress-plugins)
+* or [sign up to Microsoft OneDrive using my referral link](https://onedrive.live.com?invref=b1f728851abada15&invsrc=90) - we both get 0.5GB extra for free!
+* or [sign up to RealPlayer Cloud using my referral link](https://cloud.real.com/r/UzKHSP) - we both get 1GB extra for free! 
+* get me anything from [my Amazon whislisth](http://www.amazon.com/gp/registry/wishlist/2QB6SQ5XX2U0N/105-3209188-5640446?reveal=unpurchased&filter=all&sort=priority&layout=standard&x=11&y=10) (used items are OK!)
+
+Any help is greatly appreciated. Thanks!
+*//[Ulf Benjaminsson](http://www.ulfben.com)*
 
 = Flash Gallery supports: =
 * full screen viewing
